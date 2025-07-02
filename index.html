@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>FitPic - Style Made Personal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Page 1: Entry -->
+    <div id="entry-page" class="page active">
+        <div class="container">
+            <header class="minimal-header">
+                <div class="logo-mark">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                        <defs>
+                            <pattern id="halftone" patternUnits="userSpaceOnUse" width="4" height="4">
+                                <circle cx="2" cy="2" r="0.8" fill="#0A0A0A" opacity="0.1"/>
+                            </pattern>
+                        </defs>
+                        <rect x="8" y="8" width="8" height="8" fill="#0A0A0A" rx="1"/>
+                        <rect x="20" y="8" width="8" height="8" fill="#0A0A0A" rx="1"/>
+                        <rect x="32" y="8" width="8" height="8" fill="#0A0A0A" rx="1"/>
+                        <rect x="8" y="20" width="8" height="8" fill="#0A0A0A" rx="1"/>
+                        <rect x="20" y="20" width="8" height="8" fill="#0A0A0A" rx="1"/>
+                        <rect x="32" y="20" width="8" height="8" fill="#0A0A0A" rx="1"/>
+                        <rect x="8" y="32" width="8" height="8" fill="#0A0A0A" rx="1"/>
+                        <rect x="20" y="32" width="8" height="8" fill="#0A0A0A" rx="1"/>
+                        <rect x="32" y="32" width="8" height="8" fill="#0A0A0A" rx="1"/>
+                        <rect x="0" y="0" width="48" height="48" fill="url(#halftone)" opacity="0.3"/>
+                    </svg>
+                </div>
+                <h1 class="app-title">FitPic</h1>
+            </header>
+
+            <main class="entry-content">
+                <div class="welcome-section">
+                    <h2 class="display-text">Style made personal</h2>
+                    <p class="body-text">Get AI-powered outfit suggestions tailored to your style, weather, and schedule.</p>
+                </div>
+
+                <div class="auth-section">
+                    <div class="phone-auth">
+                        <div class="input-group">
+                            <div class="country-code">
+                                <span>🇺🇸 +1</span>
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                    <path d="M3 4.5L6 7.5L9 4.5" stroke="#6B6B6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <input type="tel" placeholder="Phone number" class="phone-input">
+                        </div>
+                        <button class="primary-button" onclick="navigateToOnboarding()">Continue</button>
+                    </div>
+
+                    <div class="auth-divider">
+                        <span>or</span>
+                    </div>
+
+                    <div class="alternative-auth">
+                        <button class="apple-signin">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                <path d="M13.8 9.6c0-2.4 1.8-3.6 1.8-3.6S14.4 4.8 12.6 4.8c-1.2 0-1.8.6-2.4.6s-1.2-.6-2.4-.6C6 4.8 4.2 6 4.2 8.4c0 2.4 1.8 5.4 3.6 5.4.6 0 1.2-.6 1.8-.6s1.2.6 1.8.6c1.8 0 3.6-3 3.6-3s-1.2-.6-1.2-2.4z" fill="white"/>
+                                <path d="M12 1.8C12.6 1.2 13.2.6 12.6 0c-.6 0-1.2.6-1.8 1.2S10.2 2.4 10.8 3c.6 0 1.2-.6 1.2-1.2z" fill="white"/>
+                            </svg>
+                            Continue with Apple
+                        </button>
+                        <button class="email-signin" onclick="navigateToOnboarding()">Continue with Email</button>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="legal-footer">
+                <p class="caption-text">By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a></p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Page 2: Onboarding Flow -->
+    <div id="onboarding-page" class="page">
+        <div class="container">
+            <header class="onboarding-header">
+                <button class="back-button" onclick="navigateToEntry()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="onboarding-progress"></div>
+                </div>
+                <div class="step-indicator">
+                    <span id="current-step">1</span> / 6
+                </div>
+            </header>
+
+            <!-- Step 1: About You -->
+            <div id="step-1" class="onboarding-step active">
+                <div class="step-content">
+                    <h2 class="headline-text">Tell us about yourself</h2>
+                    <p class="body-text">This helps us personalize your style recommendations</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Age</label>
+                        <input type="number" placeholder="25" class="form-input" min="13" max="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">How do you identify?</label>
+                        <div class="selection-grid">
+                            <button class="selection-card" data-value="woman">
+                                <span>Woman</span>
+                            </button>
+                            <button class="selection-card" data-value="man">
+                                <span>Man</span>
+                            </button>
+                            <button class="selection-card" data-value="non-binary">
+                                <span>Non-binary</span>
+                            </button>
+                            <button class="selection-card" data-value="prefer-not-to-say">
+                                <span>Prefer not to say</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <div class="location-input">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M8 1C5.79086 1 4 2.79086 4 5C4 8.5 8 15 8 15C8 15 12 8.5 12 5C12 2.79086 10.2091 1 8 1Z" stroke="#6B6B6B" stroke-width="1.5"/>
+                                <circle cx="8" cy="5" r="1.5" stroke="#6B6B6B" stroke-width="1.5"/>
+                            </svg>
+                            <input type="text" placeholder="New York, NY" class="form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="primary-button" onclick="nextStep()">Continue</button>
+            </div>
+
+            <!-- Step 2: Style DNA -->
+            <div id="step-2" class="onboarding-step">
+                <div class="step-content">
+                    <h2 class="headline-text">What's your style DNA?</h2>
+                    <p class="body-text">Select brands and aesthetics that resonate with you</p>
+
+                    <div class="brand-section">
+                        <h3 class="form-label">Brands you love</h3>
+                        <p class="form-helper">Select all that resonate with your style</p>
+                        <div class="brand-grid">
+                            <div class="brand-card selected smart-default" data-brand="nike">
+                                <div class="brand-logo">Nike</div>
+                                <div class="brand-popularity">Popular</div>
+                            </div>
+                            <div class="brand-card" data-brand="adidas">
+                                <div class="brand-logo">Adidas</div>
+                            </div>
+                            <div class="brand-card selected smart-default" data-brand="zara">
+                                <div class="brand-logo">Zara</div>
+                                <div class="brand-popularity">Popular</div>
+                            </div>
+                            <div class="brand-card" data-brand="uniqlo">
+                                <div class="brand-logo">Uniqlo</div>
+                            </div>
+                            <div class="brand-card" data-brand="hm">
+                                <div class="brand-logo">H&M</div>
+                            </div>
+                            <div class="brand-card" data-brand="everlane">
+                                <div class="brand-logo">Everlane</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aesthetic-section">
+                        <h3 class="form-label">Your Aesthetic</h3>
+                        <div class="aesthetic-grid">
+                            <div class="aesthetic-card" data-aesthetic="minimalist">
+                                <div class="aesthetic-image minimalist-bg"></div>
+                                <span>Minimalist</span>
+                            </div>
+                            <div class="aesthetic-card" data-aesthetic="streetwear">
+                                <div class="aesthetic-image streetwear-bg"></div>
+                                <span>Streetwear</span>
+                            </div>
+                            <div class="aesthetic-card" data-aesthetic="classic">
+                                <div class="aesthetic-image classic-bg"></div>
+                                <span>Classic</span>
+                            </div>
+                            <div class="aesthetic-card" data-aesthetic="boho">
+                                <div class="aesthetic-image boho-bg"></div>
+                                <span>Boho</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="primary-button" onclick="nextStep()">Continue</button>
+            </div>
+
+            <!-- Steps 3-6: Photo Capture -->
+            <div id="step-3" class="onboarding-step photo-step">
+                <div class="camera-container">
+                    <div class="camera-overlay">
+                        <div class="guidance-text">
+                            <h2 class="headline-text">Front facing photo</h2>
+                            <p class="body-text">Stand naturally and look at the camera</p>
+                        </div>
+                        <div class="photo-guide">
+                            <div class="guide-outline"></div>
+                        </div>
+                        <div class="capture-controls">
+                            <button class="capture-button" onclick="capturePhoto()">
+                                <div class="capture-inner"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="step-4" class="onboarding-step photo-step">
+                <div class="camera-container">
+                    <div class="camera-overlay">
+                        <div class="guidance-text">
+                            <h2 class="headline-text">Side profile</h2>
+                            <p class="body-text">Turn to your left and show your profile</p>
+                        </div>
+                        <div class="photo-guide">
+                            <div class="guide-outline profile"></div>
+                        </div>
+                        <div class="capture-controls">
+                            <button class="capture-button" onclick="capturePhoto()">
+                                <div class="capture-inner"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="step-5" class="onboarding-step photo-step">
+                <div class="camera-container">
+                    <div class="camera-overlay">
+                        <div class="guidance-text">
+                            <h2 class="headline-text">Full body shot</h2>
+                            <p class="body-text">Step back to show your full outfit</p>
+                        </div>
+                        <div class="photo-guide">
+                            <div class="guide-outline full-body"></div>
+                        </div>
+                        <div class="capture-controls">
+                            <button class="capture-button" onclick="capturePhoto()">
+                                <div class="capture-inner"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="step-6" class="onboarding-step">
+                <div class="step-content">
+                    <h2 class="headline-text">You're all set!</h2>
+                    <p class="body-text">Let's generate your personalized style profile</p>
+
+                    <div class="profile-preview">
+                        <div class="preview-card">
+                            <div class="preview-photo"></div>
+                            <div class="preview-info">
+                                <h3>Your Style DNA</h3>
+                                <div class="style-tags">
+                                    <span class="tag">Minimalist</span>
+                                    <span class="tag">Classic</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="primary-button" onclick="navigateToProcessing()">Generate My Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 3: Processing -->
+    <div id="processing-page" class="page">
+        <div class="container processing-container">
+            <div class="processing-animation">
+                <div class="clothing-grid">
+                    <div class="grid-item" data-position="0" style="animation-delay: 0s;">
+                        <div class="halftone-dots"></div>
+                    </div>
+                    <div class="grid-item" data-position="1" style="animation-delay: 0.15s;">
+                        <div class="halftone-dots"></div>
+                    </div>
+                    <div class="grid-item" data-position="2" style="animation-delay: 0.3s;">
+                        <div class="halftone-dots"></div>
+                    </div>
+                    <div class="grid-item" data-position="3" style="animation-delay: 0.45s;">
+                        <div class="halftone-dots"></div>
+                    </div>
+                    <div class="grid-item" data-position="4" style="animation-delay: 0.6s;">
+                        <div class="halftone-dots"></div>
+                    </div>
+                    <div class="grid-item" data-position="5" style="animation-delay: 0.75s;">
+                        <div class="halftone-dots"></div>
+                    </div>
+                    <div class="grid-item" data-position="6" style="animation-delay: 0.9s;">
+                        <div class="halftone-dots"></div>
+                    </div>
+                    <div class="grid-item" data-position="7" style="animation-delay: 1.05s;">
+                        <div class="halftone-dots"></div>
+                    </div>
+                    <div class="grid-item" data-position="8" style="animation-delay: 1.2s;">
+                        <div class="halftone-dots"></div>
+                    </div>
+                </div>
+                <div class="processing-insights">
+                    <div class="insight-text" id="processing-insight">Learning your color preferences...</div>
+                </div>
+            </div>
+
+            <div class="processing-status">
+                <h2 class="headline-text" id="processing-text">Analyzing your style...</h2>
+                <p class="body-text" id="processing-subtitle">Understanding your preferences and body type</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 4: Home Feed -->
+    <div id="home-page" class="page">
+        <div class="container">
+            <header class="discover-header">
+                <div class="header-left">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="globe-icon">
+                        <circle cx="10" cy="10" r="9" stroke="#0A0A0A" stroke-width="2"/>
+                        <path d="M2 10h16M10 1c2.5 2 4 5 4 9s-1.5 7-4 9m0-18C7.5 3 6 6 6 10s1.5 7 4 9" stroke="#0A0A0A" stroke-width="2"/>
+                    </svg>
+                    <h1 class="discover-title">Discover</h1>
+                </div>
+                <button class="filter-button" onclick="toggleFilterMenu()">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 4h12M4 8h8M6 12h4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Filter Styles</span>
+                </button>
+            </header>
+
+            <div class="filter-tags-section">
+                <button class="filter-tag" data-filter="cold-days">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 2v2m0 8v2M2 8h2m8 0h2m-9.5-3.5L3 6m10 0l-1.5-1.5m0 7L13 13m-10 0l1.5-1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    <span>Cold Days</span>
+                </button>
+                <button class="filter-tag active" data-filter="date-night">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 3.5C8 5.5 6 7.5 6 9.5c0 1 .5 2 2 2s2-1 2-2c0-2-2-4-2-6z" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M4 11c0 2 2 3 4 3s4-1 4-3" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    <span>Date Night Outfit</span>
+                </button>
+                <button class="filter-tag" data-filter="wedding-guest">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 7v6m-3-3h6M8 2l1 2h2l-1 2-1 2-1-2-1-2h2l1-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Wedding Guest</span>
+                </button>
+            </div>
+
+            <main class="outfit-feed">
+                <div class="outfit-card-full">
+                    <div class="outfit-image-container">
+                        <img src="outfit images/fitpic_1.webp" alt="Outfit" class="outfit-image">
+                        <div class="outfit-actions">
+                            <button class="action-button like-button" onclick="toggleLike(this)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button class="action-button shop-button" onclick="navigateToOutfitDetail()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 2L3 9V22H21V9L15 2H9Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M3 9H21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M8 13C8 14.6569 9.34315 16 11 16C12.6569 16 14 14.6569 14 13" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button class="action-button save-button" onclick="showSaveOptions(this)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9 7H7V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M15 7H17V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9 17H7V15" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M15 17H17V15" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="outfit-tags">
+                        <span class="outfit-tag boho">Boho</span>
+                        <span class="outfit-tag warm">Warm & Humid</span>
+                        <span class="outfit-tag temp">20°C - 25°C</span>
+                    </div>
+                </div>
+
+                <!-- Additional outfit cards -->
+                <div class="outfit-card-full">
+                    <div class="outfit-image-container">
+                        <img src="outfit images/fitpic_2.webp" alt="Outfit" class="outfit-image">
+                        <div class="outfit-actions">
+                            <button class="action-button like-button" onclick="toggleLike(this)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button class="action-button shop-button" onclick="navigateToOutfitDetail()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 2L3 9V22H21V9L15 2H9Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M3 9H21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M8 13C8 14.6569 9.34315 16 11 16C12.6569 16 14 14.6569 14 13" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button class="action-button save-button" onclick="showSaveOptions(this)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9 7H7V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M15 7H17V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9 17H7V15" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M15 17H17V15" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="outfit-tags">
+                        <span class="outfit-tag casual">Casual</span>
+                        <span class="outfit-tag cool">Cool & Breezy</span>
+                        <span class="outfit-tag temp">15°C - 20°C</span>
+                    </div>
+                </div>
+
+                <!-- Additional outfit cards -->
+                <div class="outfit-card-full">
+                    <div class="outfit-image-container">
+                        <img src="outfit images/fitpic_3.webp" alt="Outfit" class="outfit-image">
+                        <div class="outfit-actions">
+                            <button class="action-button like-button" onclick="toggleLike(this)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button class="action-button shop-button" onclick="navigateToOutfitDetail()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 2L3 9V22H21V9L15 2H9Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M3 9H21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M8 13C8 14.6569 9.34315 16 11 16C12.6569 16 14 14.6569 14 13" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button class="action-button save-button" onclick="showSaveOptions(this)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9 7H7V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M15 7H17V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9 17H7V15" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M15 17H17V15" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="outfit-tags">
+                        <span class="outfit-tag elegant">Elegant</span>
+                        <span class="outfit-tag moderate">Moderate</span>
+                        <span class="outfit-tag temp">18°C - 22°C</span>
+                    </div>
+                </div>
+
+                <div class="outfit-card-full">
+                    <div class="outfit-image-container">
+                        <img src="outfit images/fitpic_4.webp" alt="Outfit" class="outfit-image">
+                        <div class="outfit-actions">
+                            <button class="action-button like-button" onclick="toggleLike(this)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button class="action-button shop-button" onclick="navigateToOutfitDetail()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 2L3 9V22H21V9L15 2H9Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M3 9H21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M8 13C8 14.6569 9.34315 16 11 16C12.6569 16 14 14.6569 14 13" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <button class="action-button save-button" onclick="showSaveOptions(this)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9 7H7V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M15 7H17V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9 17H7V15" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M15 17H17V15" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="outfit-tags">
+                        <span class="outfit-tag streetwear">Streetwear</span>
+                        <span class="outfit-tag cold">Cold Days</span>
+                        <span class="outfit-tag temp">10°C - 15°C</span>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Page 5: Outfit Detail -->
+    <div id="outfit-detail-page" class="page">
+        <div class="container">
+            <header class="detail-header">
+                <button class="back-button" onclick="navigateToHome()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="header-actions">
+                    <button class="icon-button">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button class="icon-button">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <circle cx="18" cy="5" r="3" stroke="white" stroke-width="2"/>
+                            <circle cx="6" cy="12" r="3" stroke="white" stroke-width="2"/>
+                            <circle cx="18" cy="19" r="3" stroke="white" stroke-width="2"/>
+                            <path d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49" stroke="white" stroke-width="2"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="hero-image">
+                <div class="outfit-image-large"></div>
+            </div>
+
+            <div class="outfit-content">
+                <div class="outfit-header">
+                    <h1 class="display-text">Effortless Elegance</h1>
+                    <p class="outfit-description">A sophisticated look that balances comfort with professional polish</p>
+                    <div class="context-row">
+                        <div class="context-chips">
+                            <span class="chip primary">Meeting Ready</span>
+                            <span class="chip">Perfect Weather</span>
+                            <span class="chip">Your Style</span>
+                        </div>
+                        <div class="confidence-score">
+                            <div class="confidence-ring">
+                                <svg width="24" height="24" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" stroke="#E5E5E5" stroke-width="2" fill="none"/>
+                                    <circle cx="12" cy="12" r="10" stroke="#10B981" stroke-width="2" fill="none" 
+                                            stroke-dasharray="60 2.28" stroke-dashoffset="0" transform="rotate(-90 12 12)"/>
+                                </svg>
+                                <span class="confidence-number">96</span>
+                            </div>
+                            <span class="confidence-label">Style Match</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="shopping-section">
+                    <h3 class="section-title">Get This Look</h3>
+                    <div class="product-cards">
+                        <div class="product-card">
+                            <div class="product-image product-1"></div>
+                            <div class="product-info">
+                                <h4>Linen Blazer</h4>
+                                <p class="brand">Everlane</p>
+                                <p class="price">$148</p>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image product-2"></div>
+                            <div class="product-info">
+                                <h4>Silk Camisole</h4>
+                                <p class="brand">Reformation</p>
+                                <p class="price">$88</p>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image product-3"></div>
+                            <div class="product-info">
+                                <h4>Wide Leg Trousers</h4>
+                                <p class="brand">COS</p>
+                                <p class="price">$135</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alternatives">
+                        <h4 class="form-label">Budget-Friendly Alternatives</h4>
+                        <div class="alternative-row">
+                            <div class="alternative-item">
+                                <span>Similar blazer at Zara</span>
+                                <span class="alt-price">$69</span>
+                            </div>
+                            <div class="alternative-item">
+                                <span>Similar top at H&M</span>
+                                <span class="alt-price">$24</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions-section">
+                    <button class="primary-button">Get This Look - $371</button>
+                    <div class="secondary-actions">
+                        <button class="secondary-button">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M8 1V15M1 8H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Save
+                        </button>
+                        <button class="secondary-button">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <rect x="2" y="3" width="12" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 1V5M11 1V5M2 7H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                            Schedule
+                        </button>
+                        <button class="secondary-button">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M12 5L8 9L4 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Modify
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Bottom Navigation -->
+    <nav class="bottom-nav-bar">
+        <button class="nav-item active" data-tab="outfits">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span>Outfits</span>
+        </button>
+        <button class="nav-item" data-tab="favs">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Fav's</span>
+        </button>
+        <button class="nav-item" data-tab="settings">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 1V6M12 18V23M4.22 4.22L7.76 7.76M16.24 16.24L19.78 19.78M1 12H6M18 12H23M4.22 19.78L7.76 16.24M16.24 7.76L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span>Settings</span>
+        </button>
+    </nav>
+
+    <script src="script.js"></script>
+</body>
+</html> 
