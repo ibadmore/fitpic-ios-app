@@ -135,6 +135,18 @@ body {
     position: relative;
 }
 
+/* Full width containers for onboarding and processing pages */
+#onboarding-page .container,
+#processing-page .container {
+    max-width: none;
+    width: 100%;
+}
+
+/* White background for outfit detail page */
+#outfit-detail-page {
+    background-color: #FFFFFF;
+}
+
 /* Entry Page */
 .minimal-header {
     display: flex;
@@ -315,13 +327,21 @@ body {
 .back-button {
     width: 40px;
     height: 40px;
-    background: transparent;
+    background: rgba(0, 0, 0, 0.4);
     border: none;
-    border-radius: 8px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    background: rgba(0, 0, 0, 0.6);
+    transform: scale(1.05);
 }
 
 .progress-bar {
@@ -898,10 +918,12 @@ body {
     overflow: hidden;
 }
 
-.outfit-image {
+.outfit-card-full .outfit-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+    display: block;
 }
 
 .outfit-actions {
@@ -938,13 +960,13 @@ body {
 }
 
 .action-button.liked {
-    background: #FF3B30;
+    background: white;
     border-color: #FF3B30;
 }
 
 .action-button.liked svg {
-    fill: white;
-    stroke: white;
+    fill: #FF3B30;
+    stroke: #FF3B30;
 }
 
 .outfit-tags {
@@ -1090,7 +1112,7 @@ body {
     transform: scale(0.98);
 }
 
-.outfit-image {
+.hero-card .outfit-image {
     width: 100%;
     height: 320px;
     background-size: cover;
@@ -1281,6 +1303,13 @@ body {
 .hero-image {
     height: 60vh;
     position: relative;
+}
+
+.hero-image-full {
+    height: 60vh;
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
 }
 
 .outfit-image-large {
@@ -1501,4 +1530,127 @@ body {
     .headline-text {
         font-size: 20px;
     }
-} 
+}
+
+/* Fullscreen Image Modal */
+.fullscreen-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.fullscreen-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+}
+
+.modal-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close {
+    position: absolute;
+    top: 60px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1001;
+    transition: background 0.2s ease;
+}
+
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.modal-image-container {
+    width: 90%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
+}
+
+.modal-image.zoomed {
+    cursor: zoom-out;
+    transform: scale(1.5);
+}
+
+/* Hero Expand Button */
+.expand-hero-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    z-index: 10;
+}
+
+.expand-hero-button:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* Hero Tags Overlay */
+.hero-tags {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.hero-tag {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}

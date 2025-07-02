@@ -9,42 +9,96 @@ const outfitData = [
         image: 'outfit images/fitpic_1.webp',
         tags: ['boho', 'warm', 'temp'],
         tagLabels: ['Boho', 'Warm & Humid', '20°C - 25°C'],
-        filterCategories: ['date-night']
+        filterCategories: ['date-night'],
+        title: 'Boho Date Night',
+        description: 'A romantic and free-spirited look perfect for warm evening dates',
+        confidence: 94,
+        chips: ['Date Ready', 'Warm Weather', 'Your Style'],
+        products: [
+            { name: 'Flowy Blouse', brand: 'Free People', price: 88 },
+            { name: 'High-Waist Jeans', brand: 'Madewell', price: 128 },
+            { name: 'Block Heels', brand: 'Everlane', price: 168 }
+        ]
     },
     {
         id: 2,
         image: 'outfit images/fitpic_2.webp',
         tags: ['casual', 'cool', 'temp'],
         tagLabels: ['Casual', 'Cool & Breezy', '15°C - 20°C'],
-        filterCategories: ['cold-days']
+        filterCategories: ['cold-days'],
+        title: 'Casual Cool',
+        description: 'Effortless everyday style that keeps you comfortable and chic',
+        confidence: 89,
+        chips: ['Weekend Ready', 'Cool Weather', 'Comfortable'],
+        products: [
+            { name: 'Cashmere Sweater', brand: 'Everlane', price: 100 },
+            { name: 'Straight Leg Jeans', brand: 'Levi\'s', price: 98 },
+            { name: 'White Sneakers', brand: 'Veja', price: 150 }
+        ]
     },
     {
         id: 3,
         image: 'outfit images/fitpic_3.webp',
         tags: ['elegant', 'moderate', 'temp'],
         tagLabels: ['Elegant', 'Moderate', '18°C - 22°C'],
-        filterCategories: ['wedding-guest']
+        filterCategories: ['wedding-guest'],
+        title: 'Effortless Elegance',
+        description: 'A sophisticated look that balances comfort with professional polish',
+        confidence: 96,
+        chips: ['Meeting Ready', 'Perfect Weather', 'Your Style'],
+        products: [
+            { name: 'Linen Blazer', brand: 'Everlane', price: 148 },
+            { name: 'Silk Camisole', brand: 'Reformation', price: 88 },
+            { name: 'Wide Leg Trousers', brand: 'COS', price: 135 }
+        ]
     },
     {
         id: 4,
         image: 'outfit images/fitpic_4.webp',
         tags: ['streetwear', 'cold', 'temp'],
         tagLabels: ['Streetwear', 'Cold Days', '10°C - 15°C'],
-        filterCategories: ['cold-days']
+        filterCategories: ['cold-days'],
+        title: 'Urban Edge',
+        description: 'Bold streetwear that makes a statement while keeping you warm',
+        confidence: 91,
+        chips: ['City Ready', 'Cold Weather', 'Statement Look'],
+        products: [
+            { name: 'Oversized Hoodie', brand: 'Stussy', price: 120 },
+            { name: 'Cargo Pants', brand: 'Dickies', price: 85 },
+            { name: 'High-Top Sneakers', brand: 'Converse', price: 75 }
+        ]
     },
     {
         id: 5,
         image: 'outfit images/fitpic_5.webp',
         tags: ['casual', 'warm', 'temp'],
         tagLabels: ['Casual', 'Warm Weather', '22°C - 28°C'],
-        filterCategories: ['date-night']
+        filterCategories: ['date-night'],
+        title: 'Summer Vibes',
+        description: 'Light and breezy outfit perfect for warm weather adventures',
+        confidence: 87,
+        chips: ['Summer Ready', 'Warm Weather', 'Relaxed'],
+        products: [
+            { name: 'Cotton T-Shirt', brand: 'Uniqlo', price: 15 },
+            { name: 'Linen Shorts', brand: 'J.Crew', price: 65 },
+            { name: 'Canvas Sneakers', brand: 'Allbirds', price: 98 }
+        ]
     },
     {
         id: 6,
         image: 'outfit images/fitpic_6.webp',
         tags: ['elegant', 'cool', 'temp'],
         tagLabels: ['Elegant', 'Cool Evening', '16°C - 20°C'],
-        filterCategories: ['wedding-guest']
+        filterCategories: ['wedding-guest'],
+        title: 'Evening Grace',
+        description: 'Sophisticated elegance perfect for special occasions',
+        confidence: 93,
+        chips: ['Event Ready', 'Cool Evening', 'Sophisticated'],
+        products: [
+            { name: 'Wrap Dress', brand: 'Diane von Furstenberg', price: 368 },
+            { name: 'Block Heels', brand: 'Mansur Gavriel', price: 495 },
+            { name: 'Clutch Bag', brand: 'Polene', price: 250 }
+        ]
     }
 ];
 let processingSteps = [
@@ -120,9 +174,13 @@ function navigateToHome() {
     }, 200);
 }
 
-function navigateToOutfitDetail() {
+let currentOutfitId = 1; // Default outfit ID
+
+function navigateToOutfitDetail(outfitId = 1) {
+    currentOutfitId = outfitId;
     showPage('outfit-detail-page');
     showNavigation();
+    updateOutfitDetailPage(outfitId);
 }
 
 // Navigation Visibility Functions
@@ -434,7 +492,7 @@ function generateOutfitCard(outfit) {
 
     return `
         <div class="outfit-card-full" data-filter-categories="${outfit.filterCategories.join(' ')}">
-            <div class="outfit-image-container">
+            <div class="outfit-image-container" onclick="navigateToOutfitDetail(${outfit.id})">
                 <img src="${outfit.image}" alt="Outfit" class="outfit-image">
                 <div class="outfit-actions">
                     <button class="action-button like-button" onclick="toggleLike(this)">
@@ -456,6 +514,11 @@ function generateOutfitCard(outfit) {
                             <path d="M15 7H17V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M9 17H7V15" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M15 17H17V15" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button class="action-button expand-button" onclick="openFullscreenModal('${outfit.image}')">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M8 3H5C3.89543 3 3 3.89543 3 5V8M21 8V5C21 3.89543 20.1046 3 19 3H16M16 21H19C20.1046 21 21 20.1046 21 19V16M3 16V19C3 20.1046 3.89543 21 5 21H8" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
                 </div>
@@ -488,13 +551,20 @@ function initializeOutfitFeed() {
 
 // Simple lazy loading implementation
 function initializeLazyLoading() {
-    const images = document.querySelectorAll('.outfit-image');
+    const images = document.querySelectorAll('.outfit-card-full .outfit-image');
     
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
-                img.style.opacity = '0';
+                
+                // Ensure the image fills the container properly
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                img.style.objectPosition = 'center';
+                img.style.display = 'block';
+                
                 img.style.transition = 'opacity 0.3s ease-in-out';
                 
                 img.onload = () => {
@@ -504,6 +574,8 @@ function initializeLazyLoading() {
                 // If image is already loaded
                 if (img.complete) {
                     img.style.opacity = '1';
+                } else {
+                    img.style.opacity = '0';
                 }
                 
                 observer.unobserve(img);
@@ -659,6 +731,107 @@ function trackPageLoad() {
 
 // Initialize performance tracking
 trackPageLoad();
+
+// Update outfit detail page with dynamic content
+function updateOutfitDetailPage(outfitId) {
+    const outfit = outfitData.find(o => o.id === outfitId);
+    if (!outfit) return;
+
+    // Update hero image
+    const heroImage = document.querySelector('.outfit-image-large');
+    if (heroImage) {
+        heroImage.style.backgroundImage = `url("${outfit.image}")`;
+    }
+
+    // Update description
+    const descriptionElement = document.querySelector('.outfit-description');
+    if (descriptionElement) {
+        descriptionElement.textContent = outfit.description;
+    }
+
+    // Update context chips
+    const chipsContainer = document.querySelector('.context-chips');
+    if (chipsContainer) {
+        chipsContainer.innerHTML = outfit.chips.map((chip, index) => 
+            `<span class="chip ${index === 0 ? 'primary' : ''}">${chip}</span>`
+        ).join('');
+    }
+
+    // Update hero tags overlay
+    const heroTagsContainer = document.querySelector('.hero-tags');
+    if (heroTagsContainer) {
+        const tagsHtml = outfit.tags.map((tag, index) => 
+            `<span class="hero-tag ${tag}">${outfit.tagLabels[index]}</span>`
+        ).join('');
+        heroTagsContainer.innerHTML = tagsHtml;
+    }
+
+
+    // Update product cards
+    const productCards = document.querySelectorAll('.product-card');
+    outfit.products.forEach((product, index) => {
+        if (productCards[index]) {
+            const nameElement = productCards[index].querySelector('h4');
+            const brandElement = productCards[index].querySelector('.brand');
+            const priceElement = productCards[index].querySelector('.price');
+            
+            if (nameElement) nameElement.textContent = product.name;
+            if (brandElement) brandElement.textContent = product.brand;
+            if (priceElement) priceElement.textContent = `$${product.price}`;
+        }
+    });
+
+    // Update total price in button
+    const totalPrice = outfit.products.reduce((sum, product) => sum + product.price, 0);
+    const primaryButton = document.querySelector('#outfit-detail-page .primary-button');
+    if (primaryButton) {
+        primaryButton.textContent = `Get This Look - $${totalPrice}`;
+    }
+}
+
+// Fullscreen Image Modal Functions
+function openFullscreenModal(imageSrc) {
+    const modal = document.getElementById('fullscreen-modal');
+    const modalImage = document.getElementById('modal-image');
+    
+    modalImage.src = imageSrc;
+    modal.classList.add('active');
+    
+    // Add escape key listener
+    document.addEventListener('keydown', handleModalKeydown);
+    
+    // Add zoom functionality
+    modalImage.addEventListener('click', toggleImageZoom);
+}
+
+function closeFullscreenModal() {
+    const modal = document.getElementById('fullscreen-modal');
+    const modalImage = document.getElementById('modal-image');
+    
+    modal.classList.remove('active');
+    modalImage.classList.remove('zoomed');
+    
+    // Remove event listeners
+    document.removeEventListener('keydown', handleModalKeydown);
+    modalImage.removeEventListener('click', toggleImageZoom);
+}
+
+function handleModalKeydown(e) {
+    if (e.key === 'Escape') {
+        closeFullscreenModal();
+    }
+}
+
+function toggleImageZoom() {
+    const modalImage = document.getElementById('modal-image');
+    modalImage.classList.toggle('zoomed');
+}
+
+// Helper function to get current outfit image
+function getCurrentOutfitImage() {
+    const outfit = outfitData.find(o => o.id === currentOutfitId);
+    return outfit ? outfit.image : 'outfit images/fitpic_1.webp';
+}
 
 // Prevent zoom on iOS
 document.addEventListener('gesturestart', function (e) {

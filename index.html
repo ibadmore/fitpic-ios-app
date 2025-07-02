@@ -512,54 +512,53 @@
 
     <!-- Page 5: Outfit Detail -->
     <div id="outfit-detail-page" class="page">
-        <div class="container">
-            <header class="detail-header">
-                <button class="back-button" onclick="navigateToHome()">
+        <header class="detail-header">
+            <button class="back-button" onclick="navigateToHome()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18L9 12L15 6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div class="header-actions">
+                <button class="icon-button">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M15 18L9 12L15 6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
-                <div class="header-actions">
-                    <button class="icon-button">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <button class="icon-button">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <circle cx="18" cy="5" r="3" stroke="white" stroke-width="2"/>
-                            <circle cx="6" cy="12" r="3" stroke="white" stroke-width="2"/>
-                            <circle cx="18" cy="19" r="3" stroke="white" stroke-width="2"/>
-                            <path d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49" stroke="white" stroke-width="2"/>
-                        </svg>
-                    </button>
-                </div>
-            </header>
-
-            <div class="hero-image">
-                <div class="outfit-image-large"></div>
+                <button class="icon-button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="18" cy="5" r="3" stroke="white" stroke-width="2"/>
+                        <circle cx="6" cy="12" r="3" stroke="white" stroke-width="2"/>
+                        <circle cx="18" cy="19" r="3" stroke="white" stroke-width="2"/>
+                        <path d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49" stroke="white" stroke-width="2"/>
+                    </svg>
+                </button>
             </div>
+        </header>
 
+        <div class="hero-image-full">
+            <div class="outfit-image-large">
+                <button class="expand-hero-button" onclick="openFullscreenModal(getCurrentOutfitImage())">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M8 3H5C3.89543 3 3 3.89543 3 5V8M21 8V5C21 3.89543 20.1046 3 19 3H16M16 21H19C20.1046 21 21 20.1046 21 19V16M3 16V19C3 20.1046 3.89543 21 5 21H8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="hero-tags">
+                    <span class="hero-tag boho">Boho</span>
+                    <span class="hero-tag warm">Warm & Humid</span>
+                    <span class="hero-tag temp">20°C - 25°C</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
             <div class="outfit-content">
                 <div class="outfit-header">
-                    <h1 class="display-text">Effortless Elegance</h1>
                     <p class="outfit-description">A sophisticated look that balances comfort with professional polish</p>
                     <div class="context-row">
                         <div class="context-chips">
                             <span class="chip primary">Meeting Ready</span>
                             <span class="chip">Perfect Weather</span>
                             <span class="chip">Your Style</span>
-                        </div>
-                        <div class="confidence-score">
-                            <div class="confidence-ring">
-                                <svg width="24" height="24" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10" stroke="#E5E5E5" stroke-width="2" fill="none"/>
-                                    <circle cx="12" cy="12" r="10" stroke="#10B981" stroke-width="2" fill="none" 
-                                            stroke-dasharray="60 2.28" stroke-dashoffset="0" transform="rotate(-90 12 12)"/>
-                                </svg>
-                                <span class="confidence-number">96</span>
-                            </div>
-                            <span class="confidence-label">Style Match</span>
                         </div>
                     </div>
                 </div>
@@ -632,6 +631,21 @@
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Image Modal -->
+    <div id="fullscreen-modal" class="fullscreen-modal">
+        <div class="modal-overlay" onclick="closeFullscreenModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeFullscreenModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div class="modal-image-container">
+                <img id="modal-image" src="" alt="Outfit" class="modal-image">
             </div>
         </div>
     </div>
