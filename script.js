@@ -1,46 +1,604 @@
 // ============================================
-// APP STATE & CONFIGURATION
+// UNIFIED APP STATE & CONFIGURATION
 // ============================================
 
-// Navigation State
-let currentPage = 'entry-page';
-let currentStep = 1;
-let currentOutfitId = 1;
-
-// User Profile State
-let userProfile = {
-    name: '',
-    age: '',
-    gender: '',
-    location: '',
-    brands: [],
-    aesthetics: [],
-    events: [],
-    styleProfile: null,
-    preferences: {
-        theme: 'light',
-        notifications: true,
-        currency: 'USD'
+// Unified Application State
+let appState = {
+    // Navigation State
+    navigation: {
+        currentPage: 'entry-page',
+        currentStep: 1,
+        currentOutfitId: 1
+    },
+    
+    // User Profile State
+    userProfile: {
+        name: '',
+        age: '',
+        gender: '',
+        location: '',
+        brands: [],
+        aesthetics: [],
+        events: [],
+        styleProfile: null,
+        preferences: {
+            theme: 'light',
+            notifications: true,
+            currency: 'USD'
+        }
+    },
+    
+    // Shopping Cart & Wishlist State
+    commerce: {
+        shoppingCart: [],
+        wishlist: []
+    },
+    
+    // Infinite Scroll State
+    scroll: {
+        currentOutfitPage: 1,
+        outfitsPerPage: APP_CONSTANTS.LIMITS.OUTFITS_PER_PAGE,
+        isLoading: false,
+        hasMoreOutfits: true
+    },
+    
+    // Processing Animation State
+    processing: {
+        processingIndex: 0,
+        insightIndex: 0
+    },
+    
+    // UI State
+    ui: {
+        isNavigationExpanded: false,
+        selectedScheduleDay: null,
+        selectedOccasion: null,
+        selectedModifications: []
+    },
+    
+    // User Interactions
+    interactions: {
+        userRatings: {},
+        profileDraft: null
+    },
+    
+    // Collections & Saved Items
+    collections: {
+        userCollections: [],
+        savedOutfits: [],
+        scheduledOutfits: [],
+        userRemixes: []
     }
 };
 
-// Shopping Cart & Wishlist State
-let shoppingCart = [];
-let wishlist = [];
+// ============================================
+// STATE MANAGEMENT FUNCTIONS
+// ============================================
 
-// Infinite Scroll State
-let currentOutfitPage = 1;
-let outfitsPerPage = APP_CONSTANTS.LIMITS.OUTFITS_PER_PAGE;
-let isLoading = false;
-let hasMoreOutfits = true;
+// Performance optimization: Cache frequently accessed state values
+const stateCache = new Map();
+const CACHE_DURATION = 5000; // 5 seconds
 
-// Processing Animation State
-let processingIndex = 0;
-let insightIndex = 0;
+function clearStateCache() {
+    stateCache.clear();
+}
 
-// External Data
-const countries = COUNTRIES;
-const outfitData = OUTFIT_DATA;
+function getCachedState(path) {
+    const cached = stateCache.get(path);
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+        return cached.value;
+    }
+    return null;
+}
+
+function setCachedState(path, value) {
+    stateCache.set(path, {
+        value,
+        timestamp: Date.now()
+    });
+}
+
+// Get state value using dot notation path with error handling and caching
+function getState(path, defaultValue = null) {
+    try {
+        if (!path || typeof path !== 'string') {
+            console.warn('getState: Invalid path provided', path);
+            return defaultValue;
+        }
+        
+        // Check cache first for performance
+        const cached = getCachedState(path);
+        if (cached !== null) {
+            return cached;
+        }
+        
+        const keys = path.split('.');
+        let value = appState;
+        
+        for (const key of keys) {
+            if (value && typeof value === 'object' && key in value) {
+                value = value[key];
+            } else {
+                return defaultValue;
+            }
+        }
+        
+        // Cache the result
+        setCachedState(path, value);
+        return value;
+    } catch (error) {
+        console.error('getState error:', error, 'path:', path);
+        return defaultValue;
+    }
+}
+
+// Set state value using dot notation path with error handling
+function setState(path, value) {
+    try {
+        if (!path || typeof path !== 'string') {
+            console.warn('setState: Invalid path provided', path);
+            return false;
+        }
+        
+        const keys = path.split('.');
+        const lastKey = keys.pop();
+        let target = appState;
+        
+        for (const key of keys) {
+            if (!(key in target) || typeof target[key] !== 'object') {
+                target[key] = {};
+            }
+            target = target[key];
+        }
+        
+        target[lastKey] = value;
+        
+        // Clear cache entries that might be affected by this change
+        clearStateCache();
+        
+        saveStateToStorage();
+        return true;
+    } catch (error) {
+        console.error('setState error:', error, 'path:', path, 'value:', value);
+        return false;
+    }
+}
+
+// Save entire state to localStorage
+function saveStateToStorage() {
+    try {
+        localStorage.setItem(APP_CONSTANTS.STORAGE.APP_STATE || 'fitpic-app-state', JSON.stringify(appState));
+    } catch (error) {
+        console.error('Failed to save state:', error);
+    }
+}
+
+// Load state from localStorage
+function loadStateFromStorage() {
+    try {
+        const saved = localStorage.getItem(APP_CONSTANTS.STORAGE.APP_STATE || 'fitpic-app-state');
+        if (saved) {
+            const loadedState = JSON.parse(saved);
+            // Deep merge with default state
+            mergeState(appState, loadedState);
+        }
+    } catch (error) {
+        console.error('Failed to load state:', error);
+    }
+}
+
+// Deep merge two objects
+function mergeState(target, source) {
+    for (const key in source) {
+        if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+            if (!target[key] || typeof target[key] !== 'object') {
+                target[key] = {};
+            }
+            mergeState(target[key], source[key]);
+        } else {
+            target[key] = source[key];
+        }
+    }
+}
+
+// Migrate old localStorage keys to new unified state
+function migrateOldStorage() {
+    const migrations = {
+        [APP_CONSTANTS.STORAGE.THEME]: 'userProfile.preferences.theme',
+        [APP_CONSTANTS.STORAGE.USER_PROFILE]: 'userProfile',
+        [APP_CONSTANTS.STORAGE.CART]: 'commerce.shoppingCart',
+        [APP_CONSTANTS.STORAGE.WISHLIST]: 'commerce.wishlist',
+        'userRatings': 'interactions.userRatings',
+        'scheduledOutfits': 'collections.scheduledOutfits',
+        'userRemixes': 'collections.userRemixes',
+        'userCollections': 'collections.userCollections',
+        'fitpic-profile-draft': 'interactions.profileDraft',
+        'fitpic-collections': 'collections.userCollections',
+        'fitpic-preferences': 'userProfile.preferences',
+        'fitpic-saved-outfits': 'collections.savedOutfits'
+    };
+    
+    let hasOldData = false;
+    
+    for (const [oldKey, newPath] of Object.entries(migrations)) {
+        const oldValue = localStorage.getItem(oldKey);
+        if (oldValue) {
+            hasOldData = true;
+            try {
+                // Special handling for theme which is stored as plain string
+                if (oldKey === APP_CONSTANTS.STORAGE.THEME) {
+                    setState(newPath, oldValue);
+                } else {
+                    const parsed = JSON.parse(oldValue);
+                    setState(newPath, parsed);
+                }
+                // Remove old key after successful migration
+                localStorage.removeItem(oldKey);
+            } catch (error) {
+                console.warn(`Failed to migrate ${oldKey}:`, error);
+            }
+        }
+    }
+    
+    if (hasOldData) {
+        console.log('Migrated old localStorage data to unified state');
+    }
+}
+
+// ============================================
+// EVENT MANAGEMENT SYSTEM
+// ============================================
+
+// Centralized Event Manager
+class EventManager {
+    constructor() {
+        this.handlers = new Map();
+        this.delegatedHandlers = new Map();
+        this.initialized = false;
+    }
+    
+    // Initialize all event handlers
+    init() {
+        if (this.initialized) return;
+        
+        this.setupNavigationHandlers();
+        this.setupFormHandlers();
+        this.setupModalHandlers();
+        this.setupDelegatedHandlers();
+        this.setupMobileHandlers();
+        this.setupKeyboardHandlers();
+        
+        this.initialized = true;
+        console.log('Event management system initialized');
+    }
+    
+    // Setup navigation event handlers
+    setupNavigationHandlers() {
+        // Navigation button handlers
+        const navButtons = document.querySelectorAll('[data-nav-action]');
+        navButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const action = button.dataset.navAction;
+                const target = button.dataset.navTarget;
+                
+                switch(action) {
+                    case 'navigate':
+                        this.handleNavigation(target);
+                        break;
+                    case 'back':
+                        this.handleBackNavigation();
+                        break;
+                    case 'toggle-nav':
+                        this.handleToggleNavigation();
+                        break;
+                }
+            });
+        });
+    }
+    
+    // Setup form event handlers
+    setupFormHandlers() {
+        // Form submission handlers
+        document.addEventListener('submit', (e) => {
+            if (e.target.matches('[data-form-action]')) {
+                e.preventDefault();
+                const action = e.target.dataset.formAction;
+                this.handleFormSubmission(action, e.target);
+            }
+        });
+        
+        // Input change handlers
+        document.addEventListener('change', (e) => {
+            if (e.target.matches('[data-input-action]')) {
+                const action = e.target.dataset.inputAction;
+                this.handleInputChange(action, e.target);
+            }
+        });
+    }
+    
+    // Setup modal event handlers
+    setupModalHandlers() {
+        // Modal close handlers
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('[data-modal-close]')) {
+                const modalId = e.target.dataset.modalClose;
+                this.handleModalClose(modalId);
+            }
+            
+            // Close modal when clicking overlay
+            if (e.target.matches('.modal-overlay')) {
+                const modal = e.target.closest('[data-modal]');
+                if (modal) {
+                    this.handleModalClose(modal.dataset.modal);
+                }
+            }
+        });
+    }
+    
+    // Setup delegated event handlers for dynamic content
+    setupDelegatedHandlers() {
+        // Outfit card interactions
+        document.addEventListener('click', (e) => {
+            // Like button handlers
+            if (e.target.matches('.like-button, .like-button *')) {
+                e.stopPropagation();
+                const button = e.target.closest('.like-button');
+                const outfitId = button.dataset.outfitId;
+                this.handleLikeToggle(outfitId, button);
+            }
+            
+            // Shop button handlers
+            if (e.target.matches('.shop-button, .shop-button *')) {
+                e.stopPropagation();
+                const button = e.target.closest('.shop-button');
+                const outfitId = button.dataset.outfitId;
+                this.handleShopNavigation(outfitId);
+            }
+            
+            // Save button handlers
+            if (e.target.matches('.save-button, .save-button *')) {
+                e.stopPropagation();
+                const button = e.target.closest('.save-button');
+                const outfitId = button.dataset.outfitId;
+                this.handleSaveOptions(outfitId);
+            }
+            
+            // Cart quantity handlers
+            if (e.target.matches('.quantity-btn')) {
+                const action = e.target.textContent.trim();
+                const itemId = e.target.closest('[data-item-id]')?.dataset.itemId;
+                const currentQty = parseInt(e.target.closest('.quantity-control').querySelector('.quantity').textContent);
+                this.handleQuantityChange(itemId, action === '+' ? currentQty + 1 : currentQty - 1);
+            }
+            
+            // Generic button handlers with data attributes
+            if (e.target.matches('[data-action]')) {
+                const action = e.target.dataset.action;
+                const params = e.target.dataset.params ? JSON.parse(e.target.dataset.params) : {};
+                this.handleGenericAction(action, params, e.target);
+            }
+        });
+    }
+    
+    // Setup mobile-specific handlers
+    setupMobileHandlers() {
+        // Touch event handlers for mobile interactions
+        document.addEventListener('touchstart', (e) => {
+            if (e.target.matches('.touch-feedback')) {
+                e.target.classList.add('touched');
+            }
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            if (e.target.matches('.touch-feedback')) {
+                setTimeout(() => {
+                    e.target.classList.remove('touched');
+                }, 150);
+            }
+        });
+    }
+    
+    // Setup keyboard handlers
+    setupKeyboardHandlers() {
+        document.addEventListener('keydown', (e) => {
+            // Escape key to close modals
+            if (e.key === 'Escape') {
+                const activeModal = document.querySelector('[data-modal].active');
+                if (activeModal) {
+                    this.handleModalClose(activeModal.dataset.modal);
+                }
+            }
+            
+            // Tab navigation improvements
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-nav');
+            }
+        });
+        
+        document.addEventListener('mousedown', () => {
+            document.body.classList.remove('keyboard-nav');
+        });
+    }
+    
+    // Event handler methods
+    handleNavigation(target) {
+        if (typeof window[target] === 'function') {
+            window[target]();
+        } else {
+            console.warn(`Navigation function ${target} not found`);
+        }
+    }
+    
+    handleBackNavigation() {
+        if (typeof navigateToEntry === 'function') {
+            navigateToEntry();
+        }
+    }
+    
+    handleToggleNavigation() {
+        if (typeof toggleNavigation === 'function') {
+            toggleNavigation();
+        }
+    }
+    
+    handleFormSubmission(action, form) {
+        switch(action) {
+            case 'onboarding':
+                if (typeof nextStep === 'function') {
+                    nextStep();
+                }
+                break;
+            default:
+                console.warn(`Form action ${action} not handled`);
+        }
+    }
+    
+    handleInputChange(action, input) {
+        switch(action) {
+            case 'theme-toggle':
+                if (typeof toggleTheme === 'function') {
+                    toggleTheme();
+                }
+                break;
+            default:
+                console.warn(`Input action ${action} not handled`);
+        }
+    }
+    
+    handleModalClose(modalId) {
+        const modal = document.querySelector(`[data-modal="${modalId}"]`);
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }
+    
+    handleLikeToggle(outfitId, button) {
+        if (typeof toggleLike === 'function') {
+            toggleLike(outfitId, button);
+        }
+    }
+    
+    handleShopNavigation(outfitId) {
+        if (typeof navigateToOutfitDetail === 'function') {
+            navigateToOutfitDetail(outfitId);
+        }
+    }
+    
+    handleSaveOptions(outfitId) {
+        if (typeof showSaveOptions === 'function') {
+            showSaveOptions(outfitId);
+        }
+    }
+    
+    handleQuantityChange(itemId, newQuantity) {
+        if (typeof updateCartQuantity === 'function') {
+            updateCartQuantity(itemId, newQuantity);
+        }
+    }
+    
+    handleGenericAction(action, params, element) {
+        // Handle generic actions based on data attributes
+        const functionName = action.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+        if (typeof window[functionName] === 'function') {
+            window[functionName](params, element);
+        } else {
+            console.warn(`Action function ${functionName} not found`);
+        }
+    }
+}
+
+// Initialize global event manager
+const eventManager = new EventManager();
+
+// ============================================
+// PERFORMANCE MONITORING & OPTIMIZATION
+// ============================================
+
+// Performance monitoring
+class PerformanceMonitor {
+    constructor() {
+        this.metrics = new Map();
+        this.enabled = true;
+    }
+    
+    start(label) {
+        if (!this.enabled) return;
+        this.metrics.set(label, performance.now());
+    }
+    
+    end(label) {
+        if (!this.enabled) return;
+        const startTime = this.metrics.get(label);
+        if (startTime) {
+            const duration = performance.now() - startTime;
+            console.log(`Performance: ${label} took ${duration.toFixed(2)}ms`);
+            this.metrics.delete(label);
+            return duration;
+        }
+    }
+    
+    enable() {
+        this.enabled = true;
+    }
+    
+    disable() {
+        this.enabled = false;
+    }
+}
+
+// Global performance monitor
+const perfMonitor = new PerformanceMonitor();
+
+// Lazy loading for components
+function lazyLoadComponent(selector, callback) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                callback(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        rootMargin: '50px'
+    });
+    
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(el => observer.observe(el));
+    
+    return observer;
+}
+
+// Debounce function for performance optimization
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Throttle function for performance optimization
+function throttle(func, limit) {
+    let inThrottle;
+    return function executedFunction(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
+
+// Legacy variables successfully migrated to unified state system
+
+// External Data - Note: These are defined in data files loaded before this script
+const countries = typeof COUNTRIES !== 'undefined' ? COUNTRIES : [];
+const outfitData = typeof OUTFIT_DATA !== 'undefined' ? OUTFIT_DATA : [];
 let processingSteps = APP_CONSTANTS.PROCESSING.STEPS;
 let processingSubtitles = APP_CONSTANTS.PROCESSING.SUBTITLES;
 let processingInsights = APP_CONSTANTS.PROCESSING.INSIGHTS;
@@ -50,6 +608,13 @@ let processingInsights = APP_CONSTANTS.PROCESSING.INSIGHTS;
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize state management first
+    migrateOldStorage();
+    loadStateFromStorage();
+    
+    // Initialize event management system
+    eventManager.init();
+    
     initializeApp();
     updateContextualGreeting();
     applySmartDefaults();
@@ -66,7 +631,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================
 
 function initializeTheme() {
-    const savedTheme = localStorage.getItem(APP_CONSTANTS.STORAGE.THEME) || APP_CONSTANTS.DEFAULTS.THEME;
+    const savedTheme = getState('userProfile.preferences.theme', APP_CONSTANTS.DEFAULTS.THEME);
     document.documentElement.setAttribute('data-theme', savedTheme);
     document.body.classList.toggle('dark-mode', savedTheme === 'dark');
 }
@@ -75,7 +640,7 @@ function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem(APP_CONSTANTS.STORAGE.THEME, newTheme);
+    setState('userProfile.preferences.theme', newTheme);
     
     // Toggle dark mode class on body
     document.body.classList.toggle('dark-mode', newTheme === 'dark');
@@ -127,7 +692,7 @@ function initializeApp() {
     hideNavigation();
     
     // Start processing animation if on processing page
-    if (currentPage === 'processing-page') {
+    if (getState('navigation.currentPage') === 'processing-page') {
         startProcessingAnimation();
     }
 }
@@ -140,7 +705,7 @@ function navigateToOnboarding() {
     console.log('Navigating to onboarding');
     showPage('onboarding-page');
     hideNavigation();
-    currentStep = 1;
+    setState('navigation.currentStep', 1);
     updateProgress();
     
     // Initialize step 1 visibility
@@ -174,7 +739,7 @@ function navigateToHome() {
 }
 
 function navigateToOutfitDetail(outfitId = 1) {
-    currentOutfitId = outfitId;
+    setState('navigation.currentOutfitId', outfitId);
     showPage('outfit-detail-page');
     showNavigation();
     updateOutfitDetailPage(outfitId);
@@ -292,7 +857,7 @@ function updateActiveNavItem(pageId) {
 
 function showPage(pageId) {
     // Add exit animation to current page
-    const currentPageEl = document.getElementById(currentPage);
+    const currentPageEl = document.getElementById(getState('navigation.currentPage'));
     if (currentPageEl) {
         currentPageEl.classList.add('exiting');
     }
@@ -310,7 +875,7 @@ function showPage(pageId) {
         const targetPage = document.getElementById(pageId);
         if (targetPage) {
             targetPage.classList.add('active');
-            currentPage = pageId;
+            setState('navigation.currentPage', pageId);
             
             // Update active navigation item
             updateActiveNavItem(pageId);
@@ -349,7 +914,7 @@ function nextStep() {
             updateProgress();
             
             // Update profile preview when reaching final step
-            if (currentStep === 7) {
+            if (getState('navigation.currentStep') === 7) {
                 setTimeout(updateProfilePreview, 300);
             }
         }, 300);
@@ -386,8 +951,8 @@ function capturePhoto() {
 // ============================================
 
 function startProcessingAnimation() {
-    processingIndex = 0;
-    insightIndex = 0;
+    setState('processing.processingIndex', 0);
+    setState('processing.insightIndex', 0);
     
     // Hide error state if visible
     document.getElementById('processing-error').style.display = 'none';
@@ -401,8 +966,8 @@ function startProcessingAnimation() {
     const shouldError = Math.random() < APP_CONSTANTS.PROCESSING.ERROR_PROBABILITY;
     
     const interval = setInterval(() => {
-        processingIndex++;
-        if (processingIndex < processingSteps.length) {
+        setState('processing.processingIndex', getState('processing.processingIndex') + 1);
+        if (getState('processing.processingIndex') < processingSteps.length) {
             updateProcessingText();
         } else {
             clearInterval(interval);
@@ -436,8 +1001,8 @@ function updateProcessingText() {
     const processingText = document.getElementById('processing-text');
     const processingSubtitle = document.getElementById('processing-subtitle');
     
-    processingText.textContent = processingSteps[processingIndex];
-    processingSubtitle.textContent = processingSubtitles[processingIndex];
+    processingText.textContent = processingSteps[getState('processing.processingIndex')];
+    processingSubtitle.textContent = processingSubtitles[getState('processing.processingIndex')];
     
     // Add gentle animation to text changes
     processingText.style.opacity = '0';
@@ -457,8 +1022,8 @@ function startInsightCycle() {
         insightElement.style.opacity = '0';
         
         setTimeout(() => {
-            insightIndex = (insightIndex + 1) % processingInsights.length;
-            insightElement.textContent = processingInsights[insightIndex];
+            setState('processing.insightIndex', (getState('processing.insightIndex') + 1) % processingInsights.length);
+            insightElement.textContent = processingInsights[getState('processing.insightIndex')];
             insightElement.style.opacity = '1';
         }, 300);
     }, 2000);
@@ -779,10 +1344,10 @@ function showSkeletonLoading(container, count = 3, type = 'outfit') {
 // Initialize outfit feed with infinite scroll
 function initializeOutfitFeed() {
     const outfitFeed = document.querySelector('.outfit-feed');
-    if (outfitFeed && currentPage === 'home-page') {
+    if (outfitFeed && getState('navigation.currentPage') === 'home-page') {
         // Reset infinite scroll state
-        currentOutfitPage = 1;
-        hasMoreOutfits = true;
+        setState('scroll.currentOutfitPage', 1);
+        setState('scroll.hasMoreOutfits', true);
         
         // Show skeleton loading first
         showSkeletonLoading(outfitFeed, 3, 'outfit');
@@ -803,9 +1368,9 @@ function initializeOutfitFeed() {
 
 // Load more outfits for infinite scroll
 function loadMoreOutfits() {
-    if (isLoading || !hasMoreOutfits) return;
+    if (getState('scroll.isLoading') || !getState('scroll.hasMoreOutfits')) return;
     
-    isLoading = true;
+    setState('scroll.isLoading', true);
     const outfitFeed = document.querySelector('.outfit-feed');
     
     // Show loading indicator
@@ -819,8 +1384,8 @@ function loadMoreOutfits() {
     
     // Simulate API call delay
     setTimeout(() => {
-        const startIndex = (currentOutfitPage - 1) * outfitsPerPage;
-        const endIndex = startIndex + outfitsPerPage;
+        const startIndex = (getState('scroll.currentOutfitPage') - 1) * getState('scroll.outfitsPerPage');
+        const endIndex = startIndex + getState('scroll.outfitsPerPage');
         const outfitsToLoad = outfitData.slice(startIndex, endIndex);
         
         // Remove loading indicator
@@ -832,9 +1397,9 @@ function loadMoreOutfits() {
         });
         
         // Update pagination state
-        currentOutfitPage++;
-        hasMoreOutfits = endIndex < outfitData.length;
-        isLoading = false;
+        setState('scroll.currentOutfitPage', getState('scroll.currentOutfitPage') + 1);
+        setState('scroll.hasMoreOutfits', endIndex < outfitData.length);
+        setState('scroll.isLoading', false);
         
         // Initialize lazy loading for new images
         setTimeout(() => {
@@ -874,9 +1439,9 @@ function setupInfiniteScroll() {
 // Refresh outfit feed
 function refreshOutfitFeed() {
     const outfitFeed = document.querySelector('.outfit-feed');
-    currentOutfitPage = 1;
-    hasMoreOutfits = true;
-    isLoading = false;
+    setState('scroll.currentOutfitPage', 1);
+    setState('scroll.hasMoreOutfits', true);
+    setState('scroll.isLoading', false);
     
     // Show skeleton loading
     showSkeletonLoading(outfitFeed, 3, 'outfit');
@@ -1032,7 +1597,7 @@ function showToast(message) {
 
 // Schedule Modal Functions
 function openScheduleModal() {
-    const outfit = outfitData.find(o => o.id === currentOutfitId);
+    const outfit = outfitData.find(o => o.id === getState('navigation.currentOutfitId'));
     if (!outfit) return;
     
     const today = new Date();
@@ -1159,7 +1724,7 @@ function confirmSchedule() {
         return;
     }
     
-    const outfit = outfitData.find(o => o.id === currentOutfitId);
+    const outfit = outfitData.find(o => o.id === getState('navigation.currentOutfitId'));
     const date = new Date(selectedScheduleDay);
     const formattedDate = date.toLocaleDateString('en-US', { 
         weekday: 'long', 
@@ -1170,7 +1735,7 @@ function confirmSchedule() {
     // Save to localStorage (in a real app, this would go to a backend)
     let scheduledOutfits = JSON.parse(localStorage.getItem('scheduledOutfits') || '[]');
     scheduledOutfits.push({
-        outfitId: currentOutfitId,
+        outfitId: getState('navigation.currentOutfitId'),
         date: selectedScheduleDay,
         occasion: selectedOccasion,
         scheduledAt: new Date().toISOString()
@@ -1197,7 +1762,7 @@ function closeScheduleModal() {
 
 // Remix/Modify Tools Functions
 function openRemixModal() {
-    const outfit = outfitData.find(o => o.id === currentOutfitId);
+    const outfit = outfitData.find(o => o.id === getState('navigation.currentOutfitId'));
     if (!outfit) return;
     
     const remixModal = document.createElement('div');
@@ -1296,7 +1861,7 @@ function generateRemix() {
         return;
     }
     
-    const outfit = outfitData.find(o => o.id === currentOutfitId);
+    const outfit = outfitData.find(o => o.id === getState('navigation.currentOutfitId'));
     
     // Create remix variation
     const remixId = Date.now(); // Simple ID generation
@@ -1558,6 +2123,8 @@ function updateCartBadge() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     const badge = document.getElementById('cart-badge');
     
+    if (!badge) return; // Add null check
+    
     if (totalItems > 0) {
         badge.textContent = totalItems;
         badge.style.display = 'flex';
@@ -1789,30 +2356,36 @@ function addToCart(product, outfitId) {
     };
     
     // Check if item already exists
-    const existingIndex = shoppingCart.findIndex(item => 
+    const existingIndex = getState('commerce.shoppingCart').findIndex(item => 
         item.name === product.name && item.brand === product.brand
     );
     
     if (existingIndex > -1) {
-        shoppingCart[existingIndex].quantity += 1;
+        const cart = getState('commerce.shoppingCart');
+        cart[existingIndex].quantity += 1;
+        setState('commerce.shoppingCart', cart);
     } else {
-        shoppingCart.push(cartItem);
+        const cart = getState('commerce.shoppingCart');
+        cart.push(cartItem);
+        setState('commerce.shoppingCart', cart);
     }
     
-    saveToLocalStorage('shoppingCart', shoppingCart);
+    // State automatically saved via setState
     updateCartCount();
     showCartNotification(product.name);
 }
 
 function removeFromCart(index) {
-    shoppingCart.splice(index, 1);
-    saveToLocalStorage('shoppingCart', shoppingCart);
+    const cart = getState('commerce.shoppingCart');
+    cart.splice(index, 1);
+    setState('commerce.shoppingCart', cart);
+    // State automatically saved via setState
     updateCartCount();
 }
 
 function updateCartCount() {
     const cartCount = document.querySelector('.cart-count');
-    const totalItems = shoppingCart.reduce((sum, item) => sum + item.quantity, 0);
+    const totalItems = getState('commerce.shoppingCart').reduce((sum, item) => sum + item.quantity, 0);
     
     if (cartCount) {
         cartCount.textContent = totalItems;
@@ -1842,21 +2415,25 @@ function showCartNotification(productName) {
 // ============================================
 
 function toggleWishlist(outfitId) {
-    const index = wishlist.findIndex(id => id === outfitId);
+    const index = getState('commerce.wishlist').findIndex(id => id === outfitId);
     
     if (index > -1) {
+        const wishlist = getState('commerce.wishlist');
         wishlist.splice(index, 1);
+        setState('commerce.wishlist', wishlist);
     } else {
+        const wishlist = getState('commerce.wishlist');
         wishlist.push(outfitId);
+        setState('commerce.wishlist', wishlist);
     }
     
-    saveToLocalStorage('wishlist', wishlist);
+    // State automatically saved via setState
     updateWishlistUI(outfitId);
 }
 
 function updateWishlistUI(outfitId) {
     const heartButtons = document.querySelectorAll(`[data-outfit-id="${outfitId}"] .like-button`);
-    const isWishlisted = wishlist.includes(outfitId);
+    const isWishlisted = getState('commerce.wishlist').includes(outfitId);
     
     heartButtons.forEach(button => {
         if (isWishlisted) {
@@ -1887,9 +2464,9 @@ function saveUserProfile() {
 function loadUserProfile() {
     const saved = loadFromLocalStorage('userProfile');
     if (saved) {
-        userProfile = { ...userProfile, ...saved };
+        setState('userProfile', { ...getState('userProfile'), ...saved });
     }
-    return userProfile;
+    return getState('userProfile');
 }
 
 // Initialize data from localStorage
@@ -1978,7 +2555,7 @@ function updateOutfitDetailPage(outfitId) {
     // Update wishlist button state
     const wishlistButton = document.querySelector('.wishlist-button');
     const wishlistText = document.querySelector('.wishlist-text');
-    const isWishlisted = wishlist.includes(outfitId);
+    const isWishlisted = getState('commerce.wishlist').includes(outfitId);
     
     if (wishlistButton) {
         wishlistButton.classList.toggle('active', isWishlisted);
@@ -2049,7 +2626,7 @@ function toggleImageZoom() {
 
 // Helper function to get current outfit image
 function getCurrentOutfitImage() {
-    const outfit = outfitData.find(o => o.id === currentOutfitId);
+    const outfit = outfitData.find(o => o.id === getState('navigation.currentOutfitId'));
     return outfit ? outfit.image : 'outfit images/fitpic_1.webp';
 }
 
@@ -2350,7 +2927,7 @@ function updateProfilePreview() {
     const selectedAesthetics = Array.from(document.querySelectorAll('.aesthetic-tag.selected')).map(tag => tag.textContent);
     
     // Update profile preview if on step 7
-    if (currentStep === 7) {
+    if (getState('navigation.currentStep') === 7) {
         const brandsContainer = document.getElementById('profile-brands');
         const eventsContainer = document.getElementById('profile-events');
         const aestheticsContainer = document.getElementById('profile-aesthetics');
@@ -2412,18 +2989,20 @@ function uploadPhoto() {
 
 // Wishlist functionality
 function toggleWishlist() {
-    const isWishlisted = wishlist.includes(currentOutfitId);
+    const isWishlisted = wishlist.includes(getState('navigation.currentOutfitId'));
     const wishlistButton = document.querySelector('.wishlist-button');
     const wishlistText = document.querySelector('.wishlist-text');
     
     if (isWishlisted) {
         // Remove from wishlist
-        wishlist = wishlist.filter(id => id !== currentOutfitId);
+        setState('commerce.wishlist', getState('commerce.wishlist').filter(id => id !== getState('navigation.currentOutfitId')));
         wishlistButton.classList.remove('active');
         wishlistText.textContent = 'Add to Wishlist';
     } else {
         // Add to wishlist
-        wishlist.push(currentOutfitId);
+        const wishlist = getState('commerce.wishlist');
+        wishlist.push(getState('navigation.currentOutfitId'));
+        setState('commerce.wishlist', wishlist);
         wishlistButton.classList.add('active');
         wishlistText.textContent = 'In Wishlist';
     }
@@ -2437,7 +3016,7 @@ function toggleWishlist() {
 
 // Add entire outfit to cart
 function addAllToCart() {
-    const outfit = outfitData.find(o => o.id === currentOutfitId);
+    const outfit = outfitData.find(o => o.id === getState('navigation.currentOutfitId'));
     if (!outfit) return;
     
     const addButton = document.querySelector('.add-to-cart-btn');
@@ -2453,7 +3032,7 @@ function addAllToCart() {
     setTimeout(() => {
         // Add each product to cart
         outfit.products.forEach(product => {
-            addToCart(product, currentOutfitId);
+            addToCart(product, getState('navigation.currentOutfitId'));
         });
         
         // Show success state
@@ -2540,7 +3119,7 @@ function populateFavsPage() {
     
     // Populate wishlisted outfits
     const wishlistGrid = document.getElementById('wishlisted-outfits-grid');
-    const wishlistedOutfits = outfitData.filter(outfit => wishlist.includes(outfit.id));
+    const wishlistedOutfits = outfitData.filter(outfit => getState('commerce.wishlist').includes(outfit.id));
     
     if (wishlistedOutfits.length === 0) {
         wishlistGrid.innerHTML = `
@@ -2594,7 +3173,7 @@ function populateCartPage() {
     const cartItems = document.getElementById('cart-page-items');
     const cartFooter = document.getElementById('cart-page-footer');
     
-    if (shoppingCart.length === 0) {
+    if (getState('commerce.shoppingCart').length === 0) {
         cartEmpty.style.display = 'block';
         cartItems.style.display = 'none';
         cartFooter.style.display = 'none';
@@ -2604,7 +3183,7 @@ function populateCartPage() {
         cartFooter.style.display = 'block';
         
         // Populate cart items (reuse existing cart functionality)
-        cartItems.innerHTML = shoppingCart.map(item => `
+        cartItems.innerHTML = getState('commerce.shoppingCart').map(item => `
             <div class="cart-item">
                 <div class="cart-item-info">
                     <h4>${item.name}</h4>
@@ -2666,9 +3245,9 @@ function deleteAccount() {
     if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
         // Clear all user data
         localStorage.clear();
-        shoppingCart = [];
-        wishlist = [];
-        userProfile = {};
+        setState('commerce.shoppingCart', []);
+        setState('commerce.wishlist', []);
+        setState('userProfile', {});
         
         showToast('Account deleted');
         navigateToEntry();

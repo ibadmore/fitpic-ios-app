@@ -2739,6 +2739,98 @@ input:checked + .toggle-slider:before {
     color: var(--text-primary);
 }
 
+/* ============================================
+   PAGES - CART
+   ============================================ */
+
+/* Cart Page */
+.cart-page-content {
+    min-height: 400px;
+}
+
+.cart-page-empty {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-cart-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+}
+
+.cart-page-empty h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.cart-page-empty p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.browse-outfits-btn {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.browse-outfits-btn:hover {
+    background: #0052CC;
+}
+
+.cart-page-footer {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    margin-top: 24px;
+}
+
+.cart-summary {
+    margin-bottom: 24px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.summary-row.total {
+    font-weight: 600;
+    font-size: 18px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-color);
+    margin-bottom: 0;
+}
+
+.checkout-btn {
+    width: 100%;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.checkout-btn:hover {
+    background: #0052CC;
+}
 
 /* ============================================
    UTILITIES - LOADING & SKELETON
@@ -3680,62 +3772,6 @@ input:checked + .toggle-slider:before {
 /* ============================================
    COMPONENTS - CART
    ============================================ */
-
-/* Cart Page */
-.cart-page-content {
-    min-height: 400px;
-}
-
-.cart-page-empty {
-    text-align: center;
-    padding: 60px 20px;
-}
-
-.empty-cart-icon {
-    font-size: 64px;
-    margin-bottom: 16px;
-}
-
-.cart-page-empty h3 {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-}
-
-.cart-page-empty p {
-    font-size: 16px;
-    color: var(--text-secondary);
-    margin-bottom: 24px;
-}
-
-.cart-page-footer {
-    background: var(--bg-secondary);
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: var(--shadow-sm);
-    margin-top: 24px;
-}
-
-.cart-summary {
-    margin-bottom: 24px;
-}
-
-.summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    font-size: 16px;
-}
-
-.summary-row.total {
-    font-weight: 600;
-    font-size: 18px;
-    padding-top: 8px;
-    border-top: 1px solid var(--border-color);
-    margin-bottom: 0;
-}
 
 /* Cart Badge */
 .cart-badge {

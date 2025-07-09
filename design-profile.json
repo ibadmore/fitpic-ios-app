@@ -1,0 +1,348 @@
+{
+    "designSystem": {
+      "name": "ModernMobileApp",
+      "platform": "iOS",
+      "version": "1.0",
+      "theme": {
+        "mode": "light",
+        "cornerRadius": {
+          "small": 8,
+          "medium": 16,
+          "large": 24,
+          "xl": 32
+        },
+        "spacing": {
+          "xs": 4,
+          "sm": 8,
+          "md": 16,
+          "lg": 24,
+          "xl": 32
+        },
+        "elevation": {
+          "card": {
+            "shadowColor": "rgba(0,0,0,0.1)",
+            "shadowOffset": {"x": 0, "y": 2},
+            "shadowRadius": 8,
+            "shadowOpacity": 0.1
+          }
+        }
+      },
+      "colors": {
+        "primary": {
+          "blue": "#007AFF",
+          "lightBlue": "#4DA2FF"
+        },
+        "semantic": {
+          "success": "#34C759",
+          "warning": "#FF9500",
+          "error": "#FF3B30"
+        },
+        "neutral": {
+          "background": "#F2F2F7",
+          "surface": "#FFFFFF",
+          "text": {
+            "primary": "#000000",
+            "secondary": "#8E8E93",
+            "tertiary": "#C7C7CC"
+          }
+        },
+        "accent": {
+          "pink": "#FF6B9D",
+          "yellow": "#FFD93D",
+          "green": "#4ECDC4",
+          "purple": "#C589E8"
+        }
+      },
+      "typography": {
+        "fontFamily": {
+          "primary": "SF Pro Display",
+          "secondary": "SF Pro Text"
+        },
+        "sizes": {
+          "xs": 12,
+          "sm": 14,
+          "body": 16,
+          "lg": 18,
+          "xl": 20,
+          "xxl": 24,
+          "title": 28,
+          "header": 34
+        },
+        "weights": {
+          "regular": 400,
+          "medium": 500,
+          "semibold": 600,
+          "bold": 700
+        },
+        "lineHeight": {
+          "tight": 1.2,
+          "normal": 1.5,
+          "relaxed": 1.8
+        }
+      },
+      "components": {
+        "statusBar": {
+          "height": 44,
+          "style": "dark-content",
+          "elements": ["time", "cellular", "wifi", "battery"]
+        },
+        "navigationBar": {
+          "height": 44,
+          "style": {
+            "background": "transparent",
+            "blur": false,
+            "borderBottom": false
+          },
+          "elements": {
+            "title": {
+              "alignment": "left",
+              "fontSize": "header",
+              "fontWeight": "bold"
+            },
+            "actions": {
+              "position": "right",
+              "iconSize": 24
+            }
+          }
+        },
+        "tabBar": {
+          "height": 83,
+          "style": {
+            "background": "blur",
+            "borderTop": false,
+            "itemSpacing": "distributed"
+          },
+          "activeIndicator": {
+            "style": "pill",
+            "color": "primary.blue",
+            "padding": {"horizontal": 24, "vertical": 8}
+          },
+          "items": {
+            "iconSize": 24,
+            "activeIconColor": "#FFFFFF",
+            "inactiveIconColor": "#8E8E93"
+          }
+        },
+        "card": {
+          "variants": {
+            "default": {
+              "background": "neutral.surface",
+              "borderRadius": "large",
+              "padding": "md",
+              "margin": {"horizontal": "md", "vertical": "sm"},
+              "shadow": true
+            },
+            "compact": {
+              "background": "neutral.surface",
+              "borderRadius": "medium",
+              "padding": "sm",
+              "margin": {"horizontal": "md", "vertical": "xs"}
+            }
+          },
+          "content": {
+            "imagePosition": ["left", "top", "right"],
+            "textHierarchy": ["title", "subtitle", "metadata"]
+          }
+        },
+        "pill": {
+          "variants": {
+            "tag": {
+              "height": 28,
+              "borderRadius": 14,
+              "padding": {"horizontal": 12, "vertical": 4},
+              "fontSize": "xs",
+              "background": "neutral.background"
+            },
+            "button": {
+              "height": 40,
+              "borderRadius": 20,
+              "padding": {"horizontal": 20, "vertical": 10},
+              "fontSize": "sm"
+            }
+          }
+        },
+        "avatar": {
+          "sizes": {
+            "small": 32,
+            "medium": 40,
+            "large": 56
+          },
+          "style": {
+            "borderRadius": "50%",
+            "borderWidth": 0
+          },
+          "grouping": {
+            "overlap": -8,
+            "maxDisplay": 3
+          }
+        },
+        "list": {
+          "style": {
+            "separator": false,
+            "background": "transparent",
+            "itemSpacing": "sm"
+          },
+          "item": {
+            "minHeight": 72,
+            "padding": {"horizontal": 0, "vertical": "sm"}
+          }
+        },
+        "note": {
+          "style": {
+            "background": "#FFF3CD",
+            "borderRadius": "medium",
+            "padding": "md",
+            "maxWidth": "80%"
+          },
+          "elements": {
+            "drawing": {
+              "enabled": true,
+              "strokeWidth": 2,
+              "color": "#8B6914"
+            },
+            "timestamp": {
+              "position": "top-right",
+              "fontSize": "xs",
+              "color": "neutral.text.secondary"
+            }
+          }
+        },
+        "bottomSheet": {
+          "style": {
+            "background": "neutral.surface",
+            "borderRadius": {"top": "xl"},
+            "padding": "lg",
+            "handle": {
+              "width": 36,
+              "height": 5,
+              "color": "#C7C7CC",
+              "marginTop": 8
+            }
+          }
+        },
+        "colorPicker": {
+          "style": {
+            "itemSize": 32,
+            "spacing": "sm",
+            "borderWidth": 3,
+            "selectedBorderColor": "#007AFF"
+          },
+          "colors": ["#FF6B6B", "#FFD93D", "#6BCF7F", "#4ECDC4", "#C589E8", "#FF6B9D"]
+        },
+        "badge": {
+          "style": {
+            "height": 20,
+            "minWidth": 20,
+            "borderRadius": 10,
+            "padding": {"horizontal": 6},
+            "fontSize": "xs",
+            "fontWeight": "medium",
+            "background": "#FF3B30",
+            "color": "#FFFFFF"
+          }
+        },
+        "icon": {
+          "sizes": {
+            "small": 16,
+            "medium": 24,
+            "large": 32
+          },
+          "style": {
+            "strokeWidth": 1.5,
+            "color": "currentColor"
+          }
+        },
+        "input": {
+          "search": {
+            "height": 36,
+            "borderRadius": 10,
+            "padding": {"horizontal": "md"},
+            "background": "rgba(142,142,147,0.12)",
+            "placeholder": {
+              "color": "neutral.text.secondary"
+            }
+          }
+        },
+        "button": {
+          "variants": {
+            "primary": {
+              "background": "primary.blue",
+              "color": "#FFFFFF",
+              "borderRadius": "medium"
+            },
+            "ghost": {
+              "background": "transparent",
+              "color": "primary.blue"
+            },
+            "icon": {
+              "size": 44,
+              "borderRadius": 22,
+              "background": "primary.blue",
+              "iconColor": "#FFFFFF"
+            }
+          }
+        }
+      },
+      "layout": {
+        "grid": {
+          "columns": 2,
+          "gap": "md",
+          "margin": "md"
+        },
+        "safeArea": {
+          "top": 44,
+          "bottom": 34
+        },
+        "contentPadding": {
+          "horizontal": "md",
+          "vertical": "md"
+        }
+      },
+      "animations": {
+        "duration": {
+          "fast": 200,
+          "normal": 300,
+          "slow": 500
+        },
+        "easing": {
+          "default": "cubic-bezier(0.25, 0.1, 0.25, 1)",
+          "spring": "cubic-bezier(0.68, -0.55, 0.265, 1.55)"
+        },
+        "transitions": {
+          "fade": true,
+          "scale": true,
+          "slide": true
+        }
+      },
+      "patterns": {
+        "lists": {
+          "showImages": true,
+          "imagePosition": "left",
+          "metadata": ["tags", "timestamp", "status"],
+          "actions": ["swipe", "longPress"]
+        },
+        "cards": {
+          "elevation": true,
+          "interactive": true,
+          "contentTypes": ["text", "image", "tags", "avatars"]
+        },
+        "navigation": {
+          "style": "tabBar",
+          "position": "bottom",
+          "gestureEnabled": true
+        }
+      },
+      "accessibility": {
+        "minimumTouchTarget": 44,
+        "contrastRatio": {
+          "normal": 4.5,
+          "large": 3
+        },
+        "focusIndicator": {
+          "style": "outline",
+          "color": "primary.blue",
+          "width": 2
+        }
+      }
+    }
+  }

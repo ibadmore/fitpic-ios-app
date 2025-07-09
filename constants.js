@@ -77,7 +77,8 @@ const APP_CONSTANTS = {
         USER_PROFILE: 'fitpic-user-profile',
         USER_RATINGS: 'fitpic-user-ratings',
         CART: 'fitpic-cart',
-        WISHLIST: 'fitpic-wishlist'
+        WISHLIST: 'fitpic-wishlist',
+        APP_STATE: 'fitpic-app-state'
     },
 
     // Default Values
