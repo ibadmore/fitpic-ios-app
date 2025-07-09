@@ -34,7 +34,7 @@ A complete HTML/CSS/JavaScript prototype of the FitPic fashion and style app des
 ## Navigation Flow
 
 ```
-Entry Page → Onboarding (6 steps) → Processing → Home Feed → Outfit Detail
+Entry Page → Onboarding (7 steps) → Processing → Home Feed → Outfit Detail
      ↑                                              ↓
      ←────────────── Back Navigation ←──────────────
 ```
@@ -70,25 +70,5 @@ Entry Page → Onboarding (6 steps) → Processing → Home Feed → Outfit Deta
 - **Vanilla JavaScript**: No dependencies, pure ES6+
 - **Progressive Enhancement**: Works without JavaScript for core content
 
-## Design Philosophy
-
-Following the Daybreak Studio philosophy: "Design that feels right. Tech that works well."
-
-- **Human-Centered**: Confident but not arrogant personality
-- **Purposeful**: Every element serves a specific function
-- **Accessible**: Works for everyone, respects user preferences
-- **Performant**: Fast, smooth, and reliable
-
----
-
-## Performance Features
-
-- Optimized assets and minimal dependencies
-- CSS animations with GPU acceleration
-- Touch event optimization
-- Smooth scrolling and transitions
-- Progressive loading simulation
-
----
 
 *This is a prototype built for demonstration purposes. All interactions are simulated and no real data is collected or processed.* 
