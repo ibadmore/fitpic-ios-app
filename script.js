@@ -338,15 +338,23 @@ let isNavigationExpanded = false;
 // Navigation Visibility Functions
 function showNavigation() {
     const nav = document.querySelector('.collapsible-nav');
+    const navToggle = document.querySelector('.nav-toggle-btn');
     if (nav) {
         nav.classList.add('visible');
+    }
+    if (navToggle) {
+        navToggle.classList.add('visible');
     }
 }
 
 function hideNavigation() {
     const nav = document.querySelector('.collapsible-nav');
+    const navToggle = document.querySelector('.nav-toggle-btn');
     if (nav) {
         nav.classList.remove('visible');
+    }
+    if (navToggle) {
+        navToggle.classList.remove('visible');
     }
 }
 
@@ -360,11 +368,11 @@ function toggleNavigation() {
     isNavigationExpanded = !isNavigationExpanded;
     
     if (isNavigationExpanded) {
-        nav.classList.add('expanded');
+        nav.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden'; // Prevent scrolling when nav is open
     } else {
-        nav.classList.remove('expanded');
+        nav.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = ''; // Restore scrolling
     }
