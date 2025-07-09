@@ -111,3 +111,37 @@ Fixed critical JavaScript errors preventing the app from functioning properly af
 - App now flows smoothly from login through onboarding to home feed
 
 **Status: ALL CRITICAL BUGS FIXED - APP FUNCTIONAL** ✅
+
+---
+
+# CLAUDE.md Workflow Update - Automatic GitHub Commits ✅
+
+## Task Overview
+Updated CLAUDE.md to include automatic GitHub commits after every major update to ensure all changes are tracked in version control.
+
+## Changes Made
+
+### 1. Enhanced Workflow Instructions ✅
+- **Updated Step 7**: Expanded final step to include specific git commands
+- **Added Automatic Commands**: `git add .`, `git commit -m "message"`, `git push origin main`
+- **Structured Process**: Clear a, b, c, d sub-steps for consistency
+- **Commit Message Guidelines**: Examples and format specifications
+
+### 2. Added Commit Guidelines Section ✅
+- **When to commit**: Clear triggers for automatic commits
+- **Message format**: Present tense, descriptive, concise guidelines
+- **Always commit**: Emphasis on never skipping version control
+- **Status check**: Option to run `git status` before committing
+
+## Files Modified
+- `CLAUDE.md` - Added automatic GitHub commit instructions and guidelines
+- `tasks/todo.md` - Updated with workflow change documentation
+
+## Review
+✅ **CLAUDE.md Workflow Enhancement Complete**
+- Added automatic GitHub commit process to workflow
+- Specified exact git commands to run after major updates
+- Included comprehensive commit guidelines and best practices
+- Ensured all changes will be tracked in version control automatically
+
+**Status: AUTOMATIC GITHUB WORKFLOW ACTIVE** ✅
