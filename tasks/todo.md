@@ -145,3 +145,44 @@ Updated CLAUDE.md to include automatic GitHub commits after every major update t
 - Ensured all changes will be tracked in version control automatically
 
 **Status: AUTOMATIC GITHUB WORKFLOW ACTIVE** ✅
+
+---
+
+# CLAUDE.md Workflow Update - Grouped Commits Strategy ✅
+
+## Task Overview
+Updated CLAUDE.md workflow to prevent commit flooding by implementing a grouped commits strategy that batches related changes together.
+
+## Changes Made
+
+### 1. Modified Commit Timing ✅
+- **Changed from**: Commit after every major task
+- **Changed to**: Commit after completing logical groups of work or major milestones
+- **Prevents**: Excessive micro-commits and GitHub notification flooding
+- **Maintains**: Proper version control tracking of meaningful progress
+
+### 2. Added Grouped Commit Strategy ✅
+- **Batch related changes**: Group 3-5 related todo items into single commits
+- **Logical milestones**: Commit at natural breakpoints (complete features, major fixes)
+- **Avoid micro-commits**: No commits for single small changes
+- **Comprehensive messages**: Summarize all changes in commit message
+
+### 3. Added Commit Timing Guidelines ✅
+- **Wait and batch**: Complete multiple tasks before committing
+- **Natural breakpoints**: Commit at logical stopping points
+- **Session-based**: Minimum once per work session for substantial progress
+- **Quality over quantity**: Fewer meaningful commits preferred
+- **Emergency commits**: Only for critical fixes needing immediate save
+
+## Files Modified
+- `CLAUDE.md` - Updated workflow with grouped commit strategy and timing guidelines
+- `tasks/todo.md` - Updated with grouped workflow change documentation
+
+## Review
+✅ **Grouped Commit Workflow Successfully Implemented**
+- Reduced commit frequency while maintaining proper version control
+- Added clear guidelines for when to batch vs. commit immediately
+- Prevents GitHub notification flooding with micro-commits
+- Maintains quality tracking of meaningful development progress
+
+**Status: GROUPED COMMIT STRATEGY ACTIVE** ✅
