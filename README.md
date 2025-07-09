@@ -79,12 +79,7 @@ Following the Daybreak Studio philosophy: "Design that feels right. Tech that wo
 - **Accessible**: Works for everyone, respects user preferences
 - **Performant**: Fast, smooth, and reliable
 
-## Browser Support
-
-- Safari 14+
-- Chrome 90+
-- Firefox 88+
-- Edge 90+
+---
 
 ## Performance Features
 

@@ -8,52 +8,35 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <!-- Page 1: Entry -->
     <div id="entry-page" class="page active">
         <div class="container">
-            <header class="minimal-header">
-                <div class="logo-mark">
-                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                        <defs>
-                            <pattern id="halftone" patternUnits="userSpaceOnUse" width="4" height="4">
-                                <circle cx="2" cy="2" r="0.8" fill="#0A0A0A" opacity="0.1"/>
-                            </pattern>
-                        </defs>
-                        <rect x="8" y="8" width="8" height="8" fill="#0A0A0A" rx="1"/>
-                        <rect x="20" y="8" width="8" height="8" fill="#0A0A0A" rx="1"/>
-                        <rect x="32" y="8" width="8" height="8" fill="#0A0A0A" rx="1"/>
-                        <rect x="8" y="20" width="8" height="8" fill="#0A0A0A" rx="1"/>
-                        <rect x="20" y="20" width="8" height="8" fill="#0A0A0A" rx="1"/>
-                        <rect x="32" y="20" width="8" height="8" fill="#0A0A0A" rx="1"/>
-                        <rect x="8" y="32" width="8" height="8" fill="#0A0A0A" rx="1"/>
-                        <rect x="20" y="32" width="8" height="8" fill="#0A0A0A" rx="1"/>
-                        <rect x="32" y="32" width="8" height="8" fill="#0A0A0A" rx="1"/>
-                        <rect x="0" y="0" width="48" height="48" fill="url(#halftone)" opacity="0.3"/>
-                    </svg>
+            <header class="entry-header">
+                <div class="logo-centered">
+                    <img src="logo.png" alt="FitPic" class="app-logo fade-in">
                 </div>
-                <h1 class="app-title">FitPic</h1>
             </header>
 
             <main class="entry-content">
-                <div class="welcome-section">
-                    <h2 class="display-text">Style made personal</h2>
-                    <p class="body-text">Get AI-powered outfit suggestions tailored to your style, weather, and schedule.</p>
-                </div>
-
                 <div class="auth-section">
                     <div class="phone-auth">
                         <div class="input-group">
-                            <div class="country-code">
-                                <span>🇺🇸 +1</span>
+                            <button class="country-code" onclick="toggleCountryDropdown()">
+                                <span id="selected-country">🇺🇸 +1</span>
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                                     <path d="M3 4.5L6 7.5L9 4.5" stroke="#6B6B6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                            </div>
-                            <input type="tel" placeholder="Phone number" class="phone-input">
+                            </button>
+                            <input type="tel" id="phone-input" placeholder="Phone number" class="phone-input">
                         </div>
-                        <button class="primary-button" onclick="navigateToOnboarding()">Continue</button>
+                        <div class="country-dropdown" id="country-dropdown">
+                            <input type="text" class="country-search" placeholder="Search countries..." onkeyup="filterCountries(this.value)">
+                            <div class="country-list" id="country-list"></div>
+                        </div>
+                        <button class="primary-button" onclick="console.log('Button clicked'); navigateToOnboarding()">Continue</button>
                     </div>
 
                     <div class="auth-divider">
@@ -69,6 +52,10 @@
                             Continue with Apple
                         </button>
                         <button class="email-signin" onclick="navigateToOnboarding()">Continue with Email</button>
+                    </div>
+
+                    <div class="guest-mode">
+                        <button class="skip-button" onclick="navigateToHome()">Skip for now</button>
                     </div>
                 </div>
             </main>
@@ -92,15 +79,13 @@
                     <div class="progress-fill" id="onboarding-progress"></div>
                 </div>
                 <div class="step-indicator">
-                    <span id="current-step">1</span> / 6
+                    <span id="current-step">1</span> / 7
                 </div>
             </header>
 
             <!-- Step 1: About You -->
             <div id="step-1" class="onboarding-step active">
-                <div class="step-content">
-                    <h2 class="headline-text">Tell us about yourself</h2>
-                    <p class="body-text">This helps us personalize your style recommendations</p>
+                <div class="step-content centered">
 
                     <div class="form-group">
                         <label class="form-label">Age</label>
@@ -132,7 +117,8 @@
                                 <path d="M8 1C5.79086 1 4 2.79086 4 5C4 8.5 8 15 8 15C8 15 12 8.5 12 5C12 2.79086 10.2091 1 8 1Z" stroke="#6B6B6B" stroke-width="1.5"/>
                                 <circle cx="8" cy="5" r="1.5" stroke="#6B6B6B" stroke-width="1.5"/>
                             </svg>
-                            <input type="text" placeholder="New York, NY" class="form-input">
+                            <input type="text" id="location-input" placeholder="New York, NY" class="form-input" onkeyup="handleLocationInput(this.value)">
+                            <div class="location-suggestions" id="location-suggestions"></div>
                         </div>
                     </div>
                 </div>
@@ -140,58 +126,27 @@
                 <button class="primary-button" onclick="nextStep()">Continue</button>
             </div>
 
-            <!-- Step 2: Style DNA -->
+            <!-- Step 2: Brands -->
             <div id="step-2" class="onboarding-step">
-                <div class="step-content">
-                    <h2 class="headline-text">What's your style DNA?</h2>
-                    <p class="body-text">Select brands and aesthetics that resonate with you</p>
-
+                <div class="step-content centered">
                     <div class="brand-section">
-                        <h3 class="form-label">Brands you love</h3>
-                        <p class="form-helper">Select all that resonate with your style</p>
-                        <div class="brand-grid">
-                            <div class="brand-card selected smart-default" data-brand="nike">
-                                <div class="brand-logo">Nike</div>
-                                <div class="brand-popularity">Popular</div>
-                            </div>
-                            <div class="brand-card" data-brand="adidas">
-                                <div class="brand-logo">Adidas</div>
-                            </div>
-                            <div class="brand-card selected smart-default" data-brand="zara">
-                                <div class="brand-logo">Zara</div>
-                                <div class="brand-popularity">Popular</div>
-                            </div>
-                            <div class="brand-card" data-brand="uniqlo">
-                                <div class="brand-logo">Uniqlo</div>
-                            </div>
-                            <div class="brand-card" data-brand="hm">
-                                <div class="brand-logo">H&M</div>
-                            </div>
-                            <div class="brand-card" data-brand="everlane">
-                                <div class="brand-logo">Everlane</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="aesthetic-section">
-                        <h3 class="form-label">Your Aesthetic</h3>
-                        <div class="aesthetic-grid">
-                            <div class="aesthetic-card" data-aesthetic="minimalist">
-                                <div class="aesthetic-image minimalist-bg"></div>
-                                <span>Minimalist</span>
-                            </div>
-                            <div class="aesthetic-card" data-aesthetic="streetwear">
-                                <div class="aesthetic-image streetwear-bg"></div>
-                                <span>Streetwear</span>
-                            </div>
-                            <div class="aesthetic-card" data-aesthetic="classic">
-                                <div class="aesthetic-image classic-bg"></div>
-                                <span>Classic</span>
-                            </div>
-                            <div class="aesthetic-card" data-aesthetic="boho">
-                                <div class="aesthetic-image boho-bg"></div>
-                                <span>Boho</span>
-                            </div>
+                        <h3 class="form-label">Select any that match your style</h3>
+                        <div class="brand-tags">
+                            <button class="brand-tag selected" data-brand="nike">Nike</button>
+                            <button class="brand-tag" data-brand="adidas">Adidas</button>
+                            <button class="brand-tag selected" data-brand="zara">Zara</button>
+                            <button class="brand-tag" data-brand="uniqlo">Uniqlo</button>
+                            <button class="brand-tag" data-brand="hm">H&M</button>
+                            <button class="brand-tag" data-brand="everlane">Everlane</button>
+                            <button class="brand-tag" data-brand="cos">COS</button>
+                            <button class="brand-tag" data-brand="reformation">Reformation</button>
+                            <button class="brand-tag" data-brand="allbirds">Allbirds</button>
+                            <button class="brand-tag" data-brand="patagonia">Patagonia</button>
+                            <button class="brand-tag" data-brand="veja">Veja</button>
+                            <button class="brand-tag" data-brand="madewell">Madewell</button>
+                            <button class="brand-tag" data-brand="gap">Gap</button>
+                            <button class="brand-tag" data-brand="levis">Levi's</button>
+                            <button class="brand-tag" data-brand="aritzia">Aritzia</button>
                         </div>
                     </div>
                 </div>
@@ -199,8 +154,57 @@
                 <button class="primary-button" onclick="nextStep()">Continue</button>
             </div>
 
-            <!-- Steps 3-6: Photo Capture -->
-            <div id="step-3" class="onboarding-step photo-step">
+            <!-- Step 3: Events & Aesthetics -->
+            <div id="step-3" class="onboarding-step">
+                <div class="step-content centered">
+                    <div class="events-section">
+                        <h3 class="form-label">What occasions do you dress for?</h3>
+                        <div class="event-tags">
+                            <button class="event-tag" data-event="work">💼 Work</button>
+                            <button class="event-tag" data-event="casual">👕 Casual</button>
+                            <button class="event-tag" data-event="date-night">🌹 Date Night</button>
+                            <button class="event-tag" data-event="gym">🏃 Gym</button>
+                            <button class="event-tag" data-event="party">🎉 Party</button>
+                            <button class="event-tag" data-event="travel">✈️ Travel</button>
+                            <button class="event-tag" data-event="wedding">💒 Wedding</button>
+                            <button class="event-tag" data-event="beach">🏖️ Beach</button>
+                            <button class="event-tag" data-event="hiking">🥾 Hiking</button>
+                            <button class="event-tag" data-event="dinner">🍽️ Dinner</button>
+                            <button class="event-tag" data-event="concert">🎵 Concert</button>
+                            <button class="event-tag" data-event="brunch">🥐 Brunch</button>
+                            <button class="event-tag" data-event="meeting">👔 Meeting</button>
+                            <button class="event-tag" data-event="festival">🎪 Festival</button>
+                            <button class="event-tag" data-event="lounge">🛋️ Lounge</button>
+                        </div>
+                    </div>
+
+                    <div class="aesthetics-section">
+                        <h3 class="form-label">Select your style aesthetics</h3>
+                        <div class="aesthetic-tags">
+                            <button class="aesthetic-tag" data-aesthetic="minimalist">Minimalist</button>
+                            <button class="aesthetic-tag" data-aesthetic="streetwear">Streetwear</button>
+                            <button class="aesthetic-tag" data-aesthetic="classic">Classic</button>
+                            <button class="aesthetic-tag" data-aesthetic="boho">Boho</button>
+                            <button class="aesthetic-tag" data-aesthetic="preppy">Preppy</button>
+                            <button class="aesthetic-tag" data-aesthetic="edgy">Edgy</button>
+                            <button class="aesthetic-tag" data-aesthetic="romantic">Romantic</button>
+                            <button class="aesthetic-tag" data-aesthetic="sporty">Sporty</button>
+                            <button class="aesthetic-tag" data-aesthetic="vintage">Vintage</button>
+                            <button class="aesthetic-tag" data-aesthetic="grunge">Grunge</button>
+                            <button class="aesthetic-tag" data-aesthetic="business">Business</button>
+                            <button class="aesthetic-tag" data-aesthetic="artistic">Artistic</button>
+                            <button class="aesthetic-tag" data-aesthetic="casual">Casual</button>
+                            <button class="aesthetic-tag" data-aesthetic="glam">Glam</button>
+                            <button class="aesthetic-tag" data-aesthetic="cottagecore">Cottagecore</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="primary-button" onclick="nextStep()">Continue</button>
+            </div>
+
+            <!-- Steps 4-7: Photo Capture -->
+            <div id="step-4" class="onboarding-step photo-step">
                 <div class="camera-container">
                     <div class="camera-overlay">
                         <div class="guidance-text">
@@ -214,12 +218,21 @@
                             <button class="capture-button" onclick="capturePhoto()">
                                 <div class="capture-inner"></div>
                             </button>
+                            <div class="upload-option">
+                                <button class="upload-button" onclick="uploadPhoto()">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M10 14V6M10 6L7 9M10 6L13 9M17 14V16C17 17.1046 16.1046 18 15 18H5C3.89543 18 3 17.1046 3 16V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Upload
+                                </button>
+                            </div>
                         </div>
+                        <p class="photo-notice">Only upload your own photos</p>
                     </div>
                 </div>
             </div>
 
-            <div id="step-4" class="onboarding-step photo-step">
+            <div id="step-5" class="onboarding-step photo-step">
                 <div class="camera-container">
                     <div class="camera-overlay">
                         <div class="guidance-text">
@@ -233,12 +246,21 @@
                             <button class="capture-button" onclick="capturePhoto()">
                                 <div class="capture-inner"></div>
                             </button>
+                            <div class="upload-option">
+                                <button class="upload-button" onclick="uploadPhoto()">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M10 14V6M10 6L7 9M10 6L13 9M17 14V16C17 17.1046 16.1046 18 15 18H5C3.89543 18 3 17.1046 3 16V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Upload
+                                </button>
+                            </div>
                         </div>
+                        <p class="photo-notice">Only upload your own photos</p>
                     </div>
                 </div>
             </div>
 
-            <div id="step-5" class="onboarding-step photo-step">
+            <div id="step-6" class="onboarding-step photo-step">
                 <div class="camera-container">
                     <div class="camera-overlay">
                         <div class="guidance-text">
@@ -252,31 +274,87 @@
                             <button class="capture-button" onclick="capturePhoto()">
                                 <div class="capture-inner"></div>
                             </button>
+                            <div class="upload-option">
+                                <button class="upload-button" onclick="uploadPhoto()">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M10 14V6M10 6L7 9M10 6L13 9M17 14V16C17 17.1046 16.1046 18 15 18H5C3.89543 18 3 17.1046 3 16V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Upload
+                                </button>
+                            </div>
                         </div>
+                        <p class="photo-notice">Only upload your own photos</p>
                     </div>
                 </div>
             </div>
 
-            <div id="step-6" class="onboarding-step">
+            <div id="step-7" class="onboarding-step">
                 <div class="step-content">
-                    <h2 class="headline-text">You're all set!</h2>
-                    <p class="body-text">Let's generate your personalized style profile</p>
+                    <h2 class="headline-text">Your Style Profile</h2>
+                    <p class="body-text">Here's what we've learned about your style</p>
 
-                    <div class="profile-preview">
-                        <div class="preview-card">
-                            <div class="preview-photo"></div>
-                            <div class="preview-info">
-                                <h3>Your Style DNA</h3>
-                                <div class="style-tags">
-                                    <span class="tag">Minimalist</span>
-                                    <span class="tag">Classic</span>
+                    <div class="profile-card-large">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <img src="outfit images/fitpic_1.webp" alt="Profile" class="avatar-image">
+                            </div>
+                            <div class="profile-basic">
+                                <h3 class="profile-name">Your Style DNA</h3>
+                                <p class="profile-location">New York, NY</p>
+                            </div>
+                            <button class="edit-profile-btn" onclick="editProfile()">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M13.5858 3.58579C14.3668 2.80474 15.6332 2.80474 16.4142 3.58579C17.1953 4.36683 17.1953 5.63316 16.4142 6.41421L6.41421 16.4142L2 18L3.58579 13.5858L13.5858 3.58579Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+
+
+                        <div class="profile-sections">
+                            <div class="profile-section">
+                                <h4 class="section-title">Your Aesthetics</h4>
+                                <div class="profile-tags" id="profile-aesthetics">
+                                    <span class="profile-tag">Minimalist</span>
+                                    <span class="profile-tag">Classic</span>
+                                    <span class="profile-tag">Business</span>
                                 </div>
                             </div>
+
+                            <div class="profile-section">
+                                <h4 class="section-title">Favorite Brands</h4>
+                                <div class="profile-tags" id="profile-brands">
+                                    <span class="profile-tag">Nike</span>
+                                    <span class="profile-tag">Zara</span>
+                                    <span class="profile-tag">Everlane</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-section">
+                                <h4 class="section-title">Events</h4>
+                                <div class="profile-tags" id="profile-events">
+                                    <span class="profile-tag">💼 Work</span>
+                                    <span class="profile-tag">🌹 Date Night</span>
+                                    <span class="profile-tag">🥐 Brunch</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="profile-actions">
+                            <button class="secondary-button" onclick="saveForLater()">Save for Later</button>
+                            <button class="share-button" onclick="shareProfile()">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M8.59 13.51L4.93 10.49C4.11 9.79 3.12 10.34 3.12 11.44V16.33C3.12 17.16 3.81 17.85 4.64 17.85H15.36C16.19 17.85 16.88 17.16 16.88 16.33V11.44C16.88 10.34 15.89 9.79 15.07 10.49L11.41 13.51C10.63 14.17 9.37 14.17 8.59 13.51Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10 2V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10 2L12 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10 2L8 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Share
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <button class="primary-button" onclick="navigateToProcessing()">Generate My Profile</button>
+                <button class="primary-button" onclick="navigateToProcessing()">Continue to AI Styling</button>
             </div>
         </div>
     </div>
@@ -320,8 +398,14 @@
             </div>
 
             <div class="processing-status">
-                <h2 class="headline-text" id="processing-text">Analyzing your style...</h2>
                 <p class="body-text" id="processing-subtitle">Understanding your preferences and body type</p>
+            </div>
+
+            <div class="error-state" id="processing-error" style="display: none;">
+                <div class="error-icon">⚠️</div>
+                <h2 class="headline-text">Something went wrong</h2>
+                <p class="body-text">We couldn't complete the analysis. Please try again.</p>
+                <button class="primary-button retry-button" onclick="retryProcessing()">Try Again</button>
             </div>
         </div>
     </div>
@@ -370,22 +454,22 @@
 
             <main class="outfit-feed">
                 <div class="outfit-card-full">
-                    <div class="outfit-image-container">
+                    <div class="outfit-image-container" onclick="navigateToOutfitDetail(1)">
                         <img src="outfit images/fitpic_1.webp" alt="Outfit" class="outfit-image">
                         <div class="outfit-actions">
-                            <button class="action-button like-button" onclick="toggleLike(this)">
+                            <button class="action-button like-button" onclick="toggleLike(this); event.stopPropagation();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                            <button class="action-button shop-button" onclick="navigateToOutfitDetail()">
+                            <button class="action-button shop-button" onclick="event.stopPropagation(); navigateToOutfitDetail();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M9 2L3 9V22H21V9L15 2H9Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M3 9H21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M8 13C8 14.6569 9.34315 16 11 16C12.6569 16 14 14.6569 14 13" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                            <button class="action-button save-button" onclick="showSaveOptions(this)">
+                            <button class="action-button save-button" onclick="showSaveOptions(this); event.stopPropagation();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M9 7H7V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -405,22 +489,22 @@
 
                 <!-- Additional outfit cards -->
                 <div class="outfit-card-full">
-                    <div class="outfit-image-container">
+                    <div class="outfit-image-container" onclick="navigateToOutfitDetail(2)">
                         <img src="outfit images/fitpic_2.webp" alt="Outfit" class="outfit-image">
                         <div class="outfit-actions">
-                            <button class="action-button like-button" onclick="toggleLike(this)">
+                            <button class="action-button like-button" onclick="toggleLike(this); event.stopPropagation();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                            <button class="action-button shop-button" onclick="navigateToOutfitDetail()">
+                            <button class="action-button shop-button" onclick="event.stopPropagation(); navigateToOutfitDetail();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M9 2L3 9V22H21V9L15 2H9Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M3 9H21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M8 13C8 14.6569 9.34315 16 11 16C12.6569 16 14 14.6569 14 13" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                            <button class="action-button save-button" onclick="showSaveOptions(this)">
+                            <button class="action-button save-button" onclick="showSaveOptions(this); event.stopPropagation();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M9 7H7V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -440,22 +524,22 @@
 
                 <!-- Additional outfit cards -->
                 <div class="outfit-card-full">
-                    <div class="outfit-image-container">
+                    <div class="outfit-image-container" onclick="navigateToOutfitDetail(3)">
                         <img src="outfit images/fitpic_3.webp" alt="Outfit" class="outfit-image">
                         <div class="outfit-actions">
-                            <button class="action-button like-button" onclick="toggleLike(this)">
+                            <button class="action-button like-button" onclick="toggleLike(this); event.stopPropagation();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                            <button class="action-button shop-button" onclick="navigateToOutfitDetail()">
+                            <button class="action-button shop-button" onclick="event.stopPropagation(); navigateToOutfitDetail();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M9 2L3 9V22H21V9L15 2H9Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M3 9H21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M8 13C8 14.6569 9.34315 16 11 16C12.6569 16 14 14.6569 14 13" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                            <button class="action-button save-button" onclick="showSaveOptions(this)">
+                            <button class="action-button save-button" onclick="showSaveOptions(this); event.stopPropagation();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M9 7H7V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -474,22 +558,22 @@
                 </div>
 
                 <div class="outfit-card-full">
-                    <div class="outfit-image-container">
+                    <div class="outfit-image-container" onclick="navigateToOutfitDetail(4)">
                         <img src="outfit images/fitpic_4.webp" alt="Outfit" class="outfit-image">
                         <div class="outfit-actions">
-                            <button class="action-button like-button" onclick="toggleLike(this)">
+                            <button class="action-button like-button" onclick="toggleLike(this); event.stopPropagation();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                            <button class="action-button shop-button" onclick="navigateToOutfitDetail()">
+                            <button class="action-button shop-button" onclick="event.stopPropagation(); navigateToOutfitDetail();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M9 2L3 9V22H21V9L15 2H9Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M3 9H21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M8 13C8 14.6569 9.34315 16 11 16C12.6569 16 14 14.6569 14 13" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                            <button class="action-button save-button" onclick="showSaveOptions(this)">
+                            <button class="action-button save-button" onclick="showSaveOptions(this); event.stopPropagation();">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M9 7H7V9" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -513,23 +597,16 @@
     <!-- Page 5: Outfit Detail -->
     <div id="outfit-detail-page" class="page">
         <header class="detail-header">
-            <button class="back-button" onclick="navigateToHome()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M15 18L9 12L15 6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <button class="back-button-rounded" onclick="navigateToHome()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18L9 12L15 6" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
+                <span>Back to Gallery</span>
             </button>
             <div class="header-actions">
-                <button class="icon-button">
+                <button class="hamburger-menu">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <button class="icon-button">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <circle cx="18" cy="5" r="3" stroke="white" stroke-width="2"/>
-                        <circle cx="6" cy="12" r="3" stroke="white" stroke-width="2"/>
-                        <circle cx="18" cy="19" r="3" stroke="white" stroke-width="2"/>
-                        <path d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49" stroke="white" stroke-width="2"/>
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
             </div>
@@ -537,99 +614,337 @@
 
         <div class="hero-image-full">
             <div class="outfit-image-large">
-                <button class="expand-hero-button" onclick="openFullscreenModal(getCurrentOutfitImage())">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M8 3H5C3.89543 3 3 3.89543 3 5V8M21 8V5C21 3.89543 20.1046 3 19 3H16M16 21H19C20.1046 21 21 20.1046 21 19V16M3 16V19C3 20.1046 3.89543 21 5 21H8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <img src="outfit images/fitpic_1.webp" alt="Outfit" class="hero-outfit-image">
+                <button class="heart-button" onclick="toggleLike(this)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
-                <div class="hero-tags">
-                    <span class="hero-tag boho">Boho</span>
-                    <span class="hero-tag warm">Warm & Humid</span>
-                    <span class="hero-tag temp">20°C - 25°C</span>
-                </div>
             </div>
         </div>
 
+        <!-- Tags section moved below image -->
+        <div class="hero-tags-section">
+            <div class="hero-tags">
+                <span class="hero-tag boho">Boho</span>
+                <span class="hero-tag warm">Warm & Humid</span>
+                <span class="hero-tag temp">20°C - 25°C</span>
+            </div>
+        </div>
+
+        <!-- Category Navigation -->
+        <div class="category-navigation">
+            <div class="category-nav-scroll">
+                <button class="category-item" data-category="shirts">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M8 2L4 6V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V6L16 2H8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 8V6C16 4.89543 15.1046 4 14 4H10C8.89543 4 8 4.89543 8 6V8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Shirts</span>
+                </button>
+                <button class="category-item" data-category="t-shirts">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M20.38 8.53C20.54 8.37 20.54 8.11 20.38 7.95L17.07 4.64C16.91 4.48 16.65 4.48 16.49 4.64L14.5 6.63V4C14.5 2.9 13.6 2 12.5 2H11.5C10.4 2 9.5 2.9 9.5 4V6.63L7.51 4.64C7.35 4.48 7.09 4.48 6.93 4.64L3.62 7.95C3.46 8.11 3.46 8.37 3.62 8.53L5.5 10.41V20C5.5 21.1 6.4 22 7.5 22H16.5C17.6 22 18.5 21.1 18.5 20V10.41L20.38 8.53Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>T-Shirts</span>
+                </button>
+                <button class="category-item" data-category="shoes">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M2 18H22L20 14H12L10 10H6L2 18Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 14L5 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13 14L11 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Shoes</span>
+                </button>
+                <button class="category-item" data-category="jackets">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 7L16 3H8L4 7V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Jackets</span>
+                </button>
+                <button class="category-item active" data-category="pants">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M8 2H16V10L14 22H10L8 10V2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 10H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Pants</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sort Section -->
+        <div class="sort-section">
+            <button class="sort-dropdown" onclick="toggleSortDropdown()">
+                <span>Sort by: Store</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid-container">
+            <div class="product-grid">
+                <div class="product-card-grid">
+                    <div class="product-image-grid">
+                        <img src="https://via.placeholder.com/180x180/D4A574/FFFFFF?text=Chinos" alt="Skyline Chinos" class="product-img">
+                    </div>
+                    <div class="product-info-grid">
+                        <h4 class="product-name">Skyline Chinos</h4>
+                        <p class="product-brand">ZARA</p>
+                        <p class="product-price">$45</p>
+                    </div>
+                    <button class="product-heart" onclick="toggleProductLike(this)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="product-card-grid">
+                    <div class="product-image-grid">
+                        <img src="https://via.placeholder.com/180x180/8B8B8B/FFFFFF?text=Urban+Slacks" alt="Urban Slacks" class="product-img">
+                    </div>
+                    <div class="product-info-grid">
+                        <h4 class="product-name">Urban Slacks</h4>
+                        <p class="product-brand">ZARA</p>
+                        <p class="product-price">$120</p>
+                    </div>
+                    <button class="product-heart" onclick="toggleProductLike(this)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="product-card-grid">
+                    <div class="product-image-grid">
+                        <img src="https://via.placeholder.com/180x180/2D2D2D/FFFFFF?text=Premium+Pants" alt="Premium Pants" class="product-img">
+                    </div>
+                    <div class="product-info-grid">
+                        <h4 class="product-name">Premium Pants</h4>
+                        <p class="product-brand">COS</p>
+                        <p class="product-price">$299</p>
+                    </div>
+                    <button class="product-heart" onclick="toggleProductLike(this)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="product-card-grid">
+                    <div class="product-image-grid">
+                        <img src="https://via.placeholder.com/180x180/4A6741/FFFFFF?text=Casual+Trousers" alt="Casual Trousers" class="product-img">
+                    </div>
+                    <div class="product-info-grid">
+                        <h4 class="product-name">Casual Trousers</h4>
+                        <p class="product-brand">H&M</p>
+                        <p class="product-price">$75</p>
+                    </div>
+                    <button class="product-heart" onclick="toggleProductLike(this)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fav's Page -->
+    <div id="favs-page" class="page">
         <div class="container">
-            <div class="outfit-content">
-                <div class="outfit-header">
-                    <p class="outfit-description">A sophisticated look that balances comfort with professional polish</p>
-                    <div class="context-row">
-                        <div class="context-chips">
-                            <span class="chip primary">Meeting Ready</span>
-                            <span class="chip">Perfect Weather</span>
-                            <span class="chip">Your Style</span>
+            <header class="page-header">
+                <h1 class="page-title">Favorites</h1>
+                <button class="filter-button" onclick="toggleFavsFilter()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M22 3H2L10 12.46V19L14 21V12.46L22 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Filter
+                </button>
+            </header>
+            
+            <div class="favs-content">
+                <div class="collections-section">
+                    <h2 class="section-title">Collections</h2>
+                    <div class="collections-grid" id="collections-grid">
+                        <!-- Collections will be populated here -->
+                    </div>
+                </div>
+                
+                <div class="wishlisted-outfits">
+                    <h2 class="section-title">Wishlisted Outfits</h2>
+                    <div class="outfit-grid" id="wishlisted-outfits-grid">
+                        <!-- Wishlisted outfits will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="settings-page" class="page">
+        <div class="container">
+            <header class="page-header">
+                <h1 class="page-title">Settings</h1>
+            </header>
+            
+            <div class="settings-content">
+                <div class="settings-section">
+                    <h3 class="settings-section-title">Appearance</h3>
+                    <div class="settings-item">
+                        <label class="settings-label">
+                            <span>Dark Mode</span>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="dark-mode-toggle" onchange="toggleTheme()">
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="settings-section-title">Notifications</h3>
+                    <div class="settings-item">
+                        <label class="settings-label">
+                            <span>New Outfit Alerts</span>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="outfit-alerts-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="settings-item">
+                        <label class="settings-label">
+                            <span>Weekly Style Reports</span>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="weekly-reports-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="settings-section-title">Privacy</h3>
+                    <div class="settings-item">
+                        <label class="settings-label">
+                            <span>Share Style Data</span>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="share-data-toggle">
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="settings-section-title">Account</h3>
+                    <button class="settings-button" onclick="editProfile()">Edit Profile</button>
+                    <button class="settings-button" onclick="exportData()">Export Data</button>
+                    <button class="settings-button danger" onclick="deleteAccount()">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profile-page" class="page">
+        <div class="container">
+            <header class="page-header">
+                <h1 class="page-title">Profile</h1>
+                <button class="edit-profile-btn" onclick="editProfile()">Edit</button>
+            </header>
+            
+            <div class="profile-content">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img src="https://via.placeholder.com/80x80?text=U" alt="User Avatar" class="avatar-image">
+                    </div>
+                    <div class="profile-info">
+                        <h2 class="profile-name">Style Explorer</h2>
+                        <p class="profile-bio">Discovering my unique style journey</p>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">47</div>
+                        <div class="stat-label">Outfits Saved</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Collections</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">8.2</div>
+                        <div class="stat-label">Style Score</div>
+                    </div>
+                </div>
+                
+                <div class="profile-sections">
+                    <div class="profile-section">
+                        <h3 class="section-title">Your Style</h3>
+                        <div class="style-tags">
+                            <span class="style-tag">Minimalist</span>
+                            <span class="style-tag">Modern</span>
+                            <span class="style-tag">Chic</span>
+                            <span class="style-tag">Versatile</span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-section">
+                        <h3 class="section-title">Favorite Brands</h3>
+                        <div class="brand-list">
+                            <div class="brand-item">Everlane</div>
+                            <div class="brand-item">COS</div>
+                            <div class="brand-item">Reformation</div>
+                            <div class="brand-item">& Other Stories</div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="shopping-section">
-                    <h3 class="section-title">Get This Look</h3>
-                    <div class="product-cards">
-                        <div class="product-card">
-                            <div class="product-image product-1"></div>
-                            <div class="product-info">
-                                <h4>Linen Blazer</h4>
-                                <p class="brand">Everlane</p>
-                                <p class="price">$148</p>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-image product-2"></div>
-                            <div class="product-info">
-                                <h4>Silk Camisole</h4>
-                                <p class="brand">Reformation</p>
-                                <p class="price">$88</p>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-image product-3"></div>
-                            <div class="product-info">
-                                <h4>Wide Leg Trousers</h4>
-                                <p class="brand">COS</p>
-                                <p class="price">$135</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="alternatives">
-                        <h4 class="form-label">Budget-Friendly Alternatives</h4>
-                        <div class="alternative-row">
-                            <div class="alternative-item">
-                                <span>Similar blazer at Zara</span>
-                                <span class="alt-price">$69</span>
-                            </div>
-                            <div class="alternative-item">
-                                <span>Similar top at H&M</span>
-                                <span class="alt-price">$24</span>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Cart Page -->
+    <div id="cart-page" class="page">
+        <div class="container">
+            <header class="page-header">
+                <h1 class="page-title">Shopping Cart</h1>
+                <button class="clear-cart-btn" onclick="clearCart()">Clear All</button>
+            </header>
+            
+            <div class="cart-page-content">
+                <div class="cart-page-empty" id="cart-page-empty">
+                    <div class="empty-cart-icon">🛍️</div>
+                    <h3>Your cart is empty</h3>
+                    <p>Browse our outfit collection and add items to your cart</p>
+                    <button class="browse-outfits-btn" onclick="navigateToHome()">Browse Outfits</button>
                 </div>
-
-                <div class="actions-section">
-                    <button class="primary-button">Get This Look - $371</button>
-                    <div class="secondary-actions">
-                        <button class="secondary-button">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M8 1V15M1 8H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            Save
-                        </button>
-                        <button class="secondary-button">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <rect x="2" y="3" width="12" height="10" rx="1" stroke="currentColor" stroke-width="1.5"/>
-                                <path d="M5 1V5M11 1V5M2 7H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                            </svg>
-                            Schedule
-                        </button>
-                        <button class="secondary-button">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M12 5L8 9L4 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Modify
-                        </button>
+                
+                <div class="cart-page-items" id="cart-page-items" style="display: none;">
+                    <!-- Cart items will be populated here -->
+                </div>
+                
+                <div class="cart-page-footer" id="cart-page-footer" style="display: none;">
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="cart-subtotal">$0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping:</span>
+                            <span>Free</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span id="cart-page-total">$0.00</span>
+                        </div>
                     </div>
+                    <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
                 </div>
             </div>
         </div>
@@ -650,32 +965,100 @@
         </div>
     </div>
 
-    <!-- Global Bottom Navigation -->
-    <nav class="bottom-nav-bar">
-        <button class="nav-item active" data-tab="outfits">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
-                <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
-                <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
-                <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
-            </svg>
-            <span>Outfits</span>
-        </button>
-        <button class="nav-item" data-tab="favs">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>Fav's</span>
-        </button>
-        <button class="nav-item" data-tab="settings">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-                <path d="M12 1V6M12 18V23M4.22 4.22L7.76 7.76M16.24 16.24L19.78 19.78M1 12H6M18 12H23M4.22 19.78L7.76 16.24M16.24 7.76L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <span>Settings</span>
-        </button>
+    <!-- Collapsible Navigation -->
+    <div class="nav-overlay" id="nav-overlay" onclick="toggleNavigation()"></div>
+    
+    <button class="nav-toggle-btn" id="nav-toggle" onclick="toggleNavigation()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+    
+    <nav class="collapsible-nav" id="collapsible-nav">
+        <div class="nav-panel">
+            <button class="nav-close-btn" onclick="toggleNavigation()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            
+            <div class="nav-items">
+                <button class="nav-item" data-tab="outfits" onclick="navigateToTab('outfits')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                        <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                        <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                        <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+                
+                <button class="nav-item" data-tab="favs" onclick="navigateToTab('favs')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                
+                <button class="nav-item" data-tab="cart" onclick="navigateToTab('cart')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <div class="cart-badge" id="nav-cart-badge" style="display: none;">0</div>
+                </button>
+                
+                <button class="nav-item" data-tab="settings" onclick="navigateToTab('settings')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 1V6M12 18V23M4.22 4.22L7.76 7.76M16.24 16.24L19.78 19.78M1 12H6M18 12H23M4.22 19.78L7.76 16.24M16.24 7.76L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="nav-divider"></div>
+            
+            <div class="nav-footer">
+                <label class="dark-mode-toggle">
+                    <span class="toggle-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="nav-dark-mode-toggle" onchange="toggleTheme()">
+                        <span class="toggle-slider"></span>
+                    </div>
+                </label>
+            </div>
+        </div>
     </nav>
 
-    <script src="script.js"></script>
+    <!-- Cart Slideout Panel -->
+    <div id="cart-slideout" class="cart-slideout">
+        <div class="cart-overlay" onclick="closeCartSlideout()"></div>
+        <div class="cart-panel">
+            <div class="cart-header">
+                <h3>Shopping Cart</h3>
+                <button class="cart-close" onclick="closeCartSlideout()">×</button>
+            </div>
+            <div class="cart-content" id="cart-content">
+                <div class="cart-empty" id="cart-empty">
+                    <div class="cart-empty-icon">🛍️</div>
+                    <p>Your cart is empty</p>
+                    <button class="browse-outfits-btn" onclick="closeCartSlideout(); navigateToHome()">Browse Outfits</button>
+                </div>
+                <div class="cart-items" id="cart-items" style="display: none;">
+                    <!-- Cart items will be populated here -->
+                </div>
+            </div>
+            <div class="cart-footer" id="cart-footer" style="display: none;">
+                <div class="cart-total">
+                    <span class="total-label">Total: </span>
+                    <span class="total-amount" id="cart-total">$0.00</span>
+                </div>
+                <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html> 

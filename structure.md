@@ -18,8 +18,8 @@ fitpic-ios-app/
 ├── README.md               # Project documentation
 ├── CLAUDE.md               # Development instructions
 ├── structure.md            # This file - project structure documentation
-└── todo.md                 # Development tasks and progress
-```
+├── tasks                   # Folder of todo list
+    todo.md                 
 
 ### Asset Directories
 ```
