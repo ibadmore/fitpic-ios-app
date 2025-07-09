@@ -890,6 +890,7 @@ function showPage(pageId) {
 // ============================================
 
 function nextStep() {
+    const currentStep = getState('navigation.currentStep');
     if (currentStep < 7) {
         // Hide current step with fade out
         const currentStepEl = document.getElementById(`step-${currentStep}`);
@@ -900,8 +901,9 @@ function nextStep() {
             currentStepEl.classList.remove('active');
             
             // Show next step with fade in
-            currentStep++;
-            const nextStepEl = document.getElementById(`step-${currentStep}`);
+            const nextStepValue = currentStep + 1;
+            setState('navigation.currentStep', nextStepValue);
+            const nextStepEl = document.getElementById(`step-${nextStepValue}`);
             nextStepEl.classList.add('active');
             nextStepEl.style.opacity = '0';
             nextStepEl.style.transform = 'translateX(20px)';
@@ -922,6 +924,7 @@ function nextStep() {
 }
 
 function updateProgress() {
+    const currentStep = getState('navigation.currentStep');
     const progress = (currentStep / 7) * 100;
     document.getElementById('onboarding-progress').style.width = `${progress}%`;
     document.getElementById('current-step').textContent = currentStep;
