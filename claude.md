@@ -1,7 +1,7 @@
 1. First think through the problem, read the codebase for relevant files, and write a plan to [tasks/todo.md].
 2. The plan should have a list of todo items that you can check off as you complete them
 3. Before you begin working, check in with me and I will verify the plan.
-4. Then, begin working on the todo items, marking them as complete as you go.
+4. Then, begin working on the todo items, marking them as complete and once batches of tasks are all completed, moving groups of completed tasks into the "completed work" section and putting outstanding task into the "active tasks section".
 5. Please every step of the way just give me a high level explanation of what changes you made
 6. Make every task and code change you do as simple as possible. We want to avoid making any massive or complex changes. Every change should impact as little code as possible. Everything is about simplicity.
 7. Finally after completing a logical group of work or major milestone:
@@ -36,10 +36,18 @@ Use this condensed format for maintaining the todo.md file:
 ```markdown
 # [Project Name] - Development Tracker
 
-## 🔴 ACTIVE TASKS
-- [ ] Current task 1 (brief description)
-- [ ] Current task 2 (brief description)
-- [ ] Current task 3 (brief description)
+## 🟢 ACTIVE TASKS
+- [ ] Phase 1 (brief description)
+    - [ ] Task 1
+    - [ ] Task 2
+
+## 🔴 UPCOMING TASKS
+- [ ] Phase 2 (brief description)
+    - [ ] Task 1
+    - [ ] Task 2
+- [ ] Phase 3 (brief description)
+    - [ ] Task 1
+    - [ ] Task 2
 
 ## 📋 CURRENT PLAN
 **Goal**: Main objective for current work
@@ -65,18 +73,6 @@ Use this condensed format for maintaining the todo.md file:
 - Result: Outcome achieved
 
 ---
-
-## 📚 ARCHIVED HISTORY
-
-<details>
-<summary>Older Sessions (Click to expand)</summary>
-
-### Older session summaries
-- Move sessions here after 4-5 recent ones
-- Keep condensed but preserve key details
-
-</details>
-```
 
 **Format Guidelines**:
 - Keep active tasks to 5-7 items maximum

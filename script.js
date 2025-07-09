@@ -1,63 +1,13 @@
-// App State
+// ============================================
+// APP STATE & CONFIGURATION
+// ============================================
+
+// Navigation State
 let currentPage = 'entry-page';
 let currentStep = 1;
 let currentOutfitId = 1;
 
-// Country Data
-const countries = [
-    { name: "United States", code: "US", flag: "🇺🇸", dialCode: "+1" },
-    { name: "United Kingdom", code: "GB", flag: "🇬🇧", dialCode: "+44" },
-    { name: "Canada", code: "CA", flag: "🇨🇦", dialCode: "+1" },
-    { name: "Australia", code: "AU", flag: "🇦🇺", dialCode: "+61" },
-    { name: "Germany", code: "DE", flag: "🇩🇪", dialCode: "+49" },
-    { name: "France", code: "FR", flag: "🇫🇷", dialCode: "+33" },
-    { name: "Italy", code: "IT", flag: "🇮🇹", dialCode: "+39" },
-    { name: "Spain", code: "ES", flag: "🇪🇸", dialCode: "+34" },
-    { name: "Netherlands", code: "NL", flag: "🇳🇱", dialCode: "+31" },
-    { name: "Switzerland", code: "CH", flag: "🇨🇭", dialCode: "+41" },
-    { name: "Sweden", code: "SE", flag: "🇸🇪", dialCode: "+46" },
-    { name: "Norway", code: "NO", flag: "🇳🇴", dialCode: "+47" },
-    { name: "Denmark", code: "DK", flag: "🇩🇰", dialCode: "+45" },
-    { name: "Finland", code: "FI", flag: "🇫🇮", dialCode: "+358" },
-    { name: "Belgium", code: "BE", flag: "🇧🇪", dialCode: "+32" },
-    { name: "Austria", code: "AT", flag: "🇦🇹", dialCode: "+43" },
-    { name: "Ireland", code: "IE", flag: "🇮🇪", dialCode: "+353" },
-    { name: "New Zealand", code: "NZ", flag: "🇳🇿", dialCode: "+64" },
-    { name: "Japan", code: "JP", flag: "🇯🇵", dialCode: "+81" },
-    { name: "China", code: "CN", flag: "🇨🇳", dialCode: "+86" },
-    { name: "South Korea", code: "KR", flag: "🇰🇷", dialCode: "+82" },
-    { name: "India", code: "IN", flag: "🇮🇳", dialCode: "+91" },
-    { name: "Brazil", code: "BR", flag: "🇧🇷", dialCode: "+55" },
-    { name: "Mexico", code: "MX", flag: "🇲🇽", dialCode: "+52" },
-    { name: "Argentina", code: "AR", flag: "🇦🇷", dialCode: "+54" },
-    { name: "Russia", code: "RU", flag: "🇷🇺", dialCode: "+7" },
-    { name: "Turkey", code: "TR", flag: "🇹🇷", dialCode: "+90" },
-    { name: "South Africa", code: "ZA", flag: "🇿🇦", dialCode: "+27" },
-    { name: "Egypt", code: "EG", flag: "🇪🇬", dialCode: "+20" },
-    { name: "Israel", code: "IL", flag: "🇮🇱", dialCode: "+972" },
-    { name: "Saudi Arabia", code: "SA", flag: "🇸🇦", dialCode: "+966" },
-    { name: "United Arab Emirates", code: "AE", flag: "🇦🇪", dialCode: "+971" },
-    { name: "Singapore", code: "SG", flag: "🇸🇬", dialCode: "+65" },
-    { name: "Malaysia", code: "MY", flag: "🇲🇾", dialCode: "+60" },
-    { name: "Thailand", code: "TH", flag: "🇹🇭", dialCode: "+66" },
-    { name: "Indonesia", code: "ID", flag: "🇮🇩", dialCode: "+62" },
-    { name: "Philippines", code: "PH", flag: "🇵🇭", dialCode: "+63" },
-    { name: "Vietnam", code: "VN", flag: "🇻🇳", dialCode: "+84" },
-    { name: "Poland", code: "PL", flag: "🇵🇱", dialCode: "+48" },
-    { name: "Portugal", code: "PT", flag: "🇵🇹", dialCode: "+351" },
-    { name: "Greece", code: "GR", flag: "🇬🇷", dialCode: "+30" },
-    { name: "Czech Republic", code: "CZ", flag: "🇨🇿", dialCode: "+420" },
-    { name: "Hungary", code: "HU", flag: "🇭🇺", dialCode: "+36" },
-    { name: "Romania", code: "RO", flag: "🇷🇴", dialCode: "+40" },
-    { name: "Ukraine", code: "UA", flag: "🇺🇦", dialCode: "+380" },
-    { name: "Chile", code: "CL", flag: "🇨🇱", dialCode: "+56" },
-    { name: "Colombia", code: "CO", flag: "🇨🇴", dialCode: "+57" },
-    { name: "Peru", code: "PE", flag: "🇵🇪", dialCode: "+51" }
-];
-
-// Shopping Cart State
-let shoppingCart = [];
-let wishlist = [];
+// User Profile State
 let userProfile = {
     name: '',
     age: '',
@@ -74,143 +24,31 @@ let userProfile = {
     }
 };
 
+// Shopping Cart & Wishlist State
+let shoppingCart = [];
+let wishlist = [];
+
 // Infinite Scroll State
 let currentOutfitPage = 1;
-let outfitsPerPage = 8;
+let outfitsPerPage = APP_CONSTANTS.LIMITS.OUTFITS_PER_PAGE;
 let isLoading = false;
 let hasMoreOutfits = true;
 
-// Outfit Data
-const outfitData = [
-    {
-        id: 1,
-        image: 'outfit images/fitpic_1.webp',
-        tags: ['boho', 'warm', 'temp'],
-        tagLabels: ['Boho', 'Warm & Humid', '20°C - 25°C'],
-        filterCategories: ['date-night'],
-        title: 'Boho Date Night',
-        description: 'A romantic and free-spirited look perfect for warm evening dates',
-        confidence: 94,
-        chips: ['Date Ready', 'Warm Weather', 'Your Style'],
-        products: [
-            { name: 'Flowy Blouse', brand: 'Free People', price: 88 },
-            { name: 'High-Waist Jeans', brand: 'Madewell', price: 128 },
-            { name: 'Block Heels', brand: 'Everlane', price: 168 }
-        ],
-        weatherSuitability: {
-            temperature: '20-25°C',
-            conditions: ['sunny', 'warm'],
-            icon: '☀️'
-        },
-        rating: 4.5,
-        reviews: 24,
-        savedBy: 156
-    },
-    {
-        id: 2,
-        image: 'outfit images/fitpic_2.webp',
-        tags: ['casual', 'cool', 'temp'],
-        tagLabels: ['Casual', 'Cool & Breezy', '15°C - 20°C'],
-        filterCategories: ['cold-days'],
-        title: 'Casual Cool',
-        description: 'Effortless everyday style that keeps you comfortable and chic',
-        confidence: 89,
-        chips: ['Weekend Ready', 'Cool Weather', 'Comfortable'],
-        products: [
-            { name: 'Cashmere Sweater', brand: 'Everlane', price: 100 },
-            { name: 'Straight Leg Jeans', brand: 'Levi\'s', price: 98 },
-            { name: 'White Sneakers', brand: 'Veja', price: 150 }
-        ]
-    },
-    {
-        id: 3,
-        image: 'outfit images/fitpic_3.webp',
-        tags: ['elegant', 'moderate', 'temp'],
-        tagLabels: ['Elegant', 'Moderate', '18°C - 22°C'],
-        filterCategories: ['wedding-guest'],
-        title: 'Effortless Elegance',
-        description: 'A sophisticated look that balances comfort with professional polish',
-        confidence: 96,
-        chips: ['Meeting Ready', 'Perfect Weather', 'Your Style'],
-        products: [
-            { name: 'Linen Blazer', brand: 'Everlane', price: 148 },
-            { name: 'Silk Camisole', brand: 'Reformation', price: 88 },
-            { name: 'Wide Leg Trousers', brand: 'COS', price: 135 }
-        ]
-    },
-    {
-        id: 4,
-        image: 'outfit images/fitpic_4.webp',
-        tags: ['streetwear', 'cold', 'temp'],
-        tagLabels: ['Streetwear', 'Cold Days', '10°C - 15°C'],
-        filterCategories: ['cold-days'],
-        title: 'Urban Edge',
-        description: 'Bold streetwear that makes a statement while keeping you warm',
-        confidence: 91,
-        chips: ['City Ready', 'Cold Weather', 'Statement Look'],
-        products: [
-            { name: 'Oversized Hoodie', brand: 'Stussy', price: 120 },
-            { name: 'Cargo Pants', brand: 'Dickies', price: 85 },
-            { name: 'High-Top Sneakers', brand: 'Converse', price: 75 }
-        ]
-    },
-    {
-        id: 5,
-        image: 'outfit images/fitpic_5.webp',
-        tags: ['casual', 'warm', 'temp'],
-        tagLabels: ['Casual', 'Warm Weather', '22°C - 28°C'],
-        filterCategories: ['date-night'],
-        title: 'Summer Vibes',
-        description: 'Light and breezy outfit perfect for warm weather adventures',
-        confidence: 87,
-        chips: ['Summer Ready', 'Warm Weather', 'Relaxed'],
-        products: [
-            { name: 'Cotton T-Shirt', brand: 'Uniqlo', price: 15 },
-            { name: 'Linen Shorts', brand: 'J.Crew', price: 65 },
-            { name: 'Canvas Sneakers', brand: 'Allbirds', price: 98 }
-        ]
-    },
-    {
-        id: 6,
-        image: 'outfit images/fitpic_6.webp',
-        tags: ['elegant', 'cool', 'temp'],
-        tagLabels: ['Elegant', 'Cool Evening', '16°C - 20°C'],
-        filterCategories: ['wedding-guest'],
-        title: 'Evening Grace',
-        description: 'Sophisticated elegance perfect for special occasions',
-        confidence: 93,
-        chips: ['Event Ready', 'Cool Evening', 'Sophisticated'],
-        products: [
-            { name: 'Wrap Dress', brand: 'Diane von Furstenberg', price: 368 },
-            { name: 'Block Heels', brand: 'Mansur Gavriel', price: 495 },
-            { name: 'Clutch Bag', brand: 'Polene', price: 250 }
-        ]
-    }
-];
-let processingSteps = [
-    'Analyzing your style...',
-    'Understanding your preferences...',
-    'Generating your looks...',
-    'Adding finishing touches...'
-];
-let processingSubtitles = [
-    'Understanding your preferences and body type',
-    'Learning from your style choices',
-    'Creating personalized outfit suggestions',
-    'Preparing your style profile'
-];
-let processingInsights = [
-    'Learning your color preferences...',
-    'Mapping your brand affinity...',
-    'Understanding your lifestyle...',
-    'Personalizing recommendations...',
-    'Calibrating style confidence...',
-    'Finalizing your profile...'
-];
+// Processing Animation State
 let processingIndex = 0;
 let insightIndex = 0;
 
-// Initialize app
+// External Data
+const countries = COUNTRIES;
+const outfitData = OUTFIT_DATA;
+let processingSteps = APP_CONSTANTS.PROCESSING.STEPS;
+let processingSubtitles = APP_CONSTANTS.PROCESSING.SUBTITLES;
+let processingInsights = APP_CONSTANTS.PROCESSING.INSIGHTS;
+
+// ============================================
+// APP INITIALIZATION
+// ============================================
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
     updateContextualGreeting();
@@ -223,9 +61,12 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(updateContextualGreeting, 60000);
 });
 
-// Theme Management
+// ============================================
+// THEME MANAGEMENT
+// ============================================
+
 function initializeTheme() {
-    const savedTheme = localStorage.getItem('fitpic-theme') || 'light';
+    const savedTheme = localStorage.getItem(APP_CONSTANTS.STORAGE.THEME) || APP_CONSTANTS.DEFAULTS.THEME;
     document.documentElement.setAttribute('data-theme', savedTheme);
     document.body.classList.toggle('dark-mode', savedTheme === 'dark');
 }
@@ -234,7 +75,7 @@ function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('fitpic-theme', newTheme);
+    localStorage.setItem(APP_CONSTANTS.STORAGE.THEME, newTheme);
     
     // Toggle dark mode class on body
     document.body.classList.toggle('dark-mode', newTheme === 'dark');
@@ -256,6 +97,10 @@ function toggleTheme() {
         navDarkModeToggle.checked = newTheme === 'dark';
     }
 }
+
+// ============================================
+// CORE APP FUNCTIONS
+// ============================================
 
 function initializeApp() {
     // Initialize theme
@@ -287,7 +132,10 @@ function initializeApp() {
     }
 }
 
-// Navigation Functions
+// ============================================
+// NAVIGATION FUNCTIONS
+// ============================================
+
 function navigateToOnboarding() {
     console.log('Navigating to onboarding');
     showPage('onboarding-page');
@@ -472,7 +320,10 @@ function showPage(pageId) {
     }, 150);
 }
 
-// Onboarding Functions
+// ============================================
+// ONBOARDING FUNCTIONS
+// ============================================
+
 function nextStep() {
     if (currentStep < 7) {
         // Hide current step with fade out
@@ -530,7 +381,10 @@ function capturePhoto() {
     }, 200);
 }
 
-// Enhanced Processing Animation with Systematic Sequence
+// ============================================
+// PROCESSING ANIMATION FUNCTIONS
+// ============================================
+
 function startProcessingAnimation() {
     processingIndex = 0;
     insightIndex = 0;
@@ -543,8 +397,8 @@ function startProcessingAnimation() {
     updateProcessingText();
     startInsightCycle();
     
-    // Simulate random error for demo (10% chance)
-    const shouldError = Math.random() < 0.1;
+    // Simulate random error for demo based on configured probability
+    const shouldError = Math.random() < APP_CONSTANTS.PROCESSING.ERROR_PROBABILITY;
     
     const interval = setInterval(() => {
         processingIndex++;
@@ -562,10 +416,10 @@ function startProcessingAnimation() {
                 // Navigate to home after processing with confident timing
                 setTimeout(() => {
                     navigateToHome();
-                }, 1500);
+                }, APP_CONSTANTS.ANIMATION.PROCESSING_FINAL_DELAY);
             }
         }
-    }, 3000);
+    }, APP_CONSTANTS.ANIMATION.PROCESSING_STEP_DURATION);
 }
 
 function showProcessingError() {
@@ -1169,8 +1023,12 @@ function showToast(message) {
         setTimeout(() => {
             toast.remove();
         }, 300);
-    }, 3000);
+    }, APP_CONSTANTS.ANIMATION.PROCESSING_STEP_DURATION);
 }
+
+// ============================================
+// MODAL FUNCTIONS
+// ============================================
 
 // Schedule Modal Functions
 function openScheduleModal() {
@@ -1638,7 +1496,10 @@ function closeSaveModal() {
     }
 }
 
-// Shopping Cart Functions
+// ============================================
+// SHOPPING CART FUNCTIONS
+// ============================================
+
 function addToCart(product, outfitId) {
     let cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]');
     
@@ -1973,10 +1834,13 @@ function showCartNotification(productName) {
     setTimeout(() => {
         notification.classList.remove('show');
         setTimeout(() => notification.remove(), 300);
-    }, 3000);
+    }, APP_CONSTANTS.ANIMATION.PROCESSING_STEP_DURATION);
 }
 
-// Wishlist Functions
+// ============================================
+// WISHLIST FUNCTIONS
+// ============================================
+
 function toggleWishlist(outfitId) {
     const index = wishlist.findIndex(id => id === outfitId);
     
@@ -2003,7 +1867,10 @@ function updateWishlistUI(outfitId) {
     });
 }
 
-// Local Storage Functions
+// ============================================
+// LOCAL STORAGE FUNCTIONS
+// ============================================
+
 function saveToLocalStorage(key, data) {
     localStorage.setItem(`fitpic-${key}`, JSON.stringify(data));
 }
@@ -2613,23 +2480,6 @@ function addAllToCart() {
     }, 1500);
 }
 
-// Show toast notification
-function showToast(message) {
-    // Create toast element
-    const toast = document.createElement('div');
-    toast.className = 'toast-notification';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    // Show toast
-    setTimeout(() => toast.classList.add('show'), 100);
-    
-    // Remove toast
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => document.body.removeChild(toast), 300);
-    }, 2000);
-}
 
 // Initialize wishlist from localStorage
 function initializeWishlist() {
@@ -2841,7 +2691,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeWishlist();
     
     // Initialize theme on body element
-    const savedTheme = localStorage.getItem('fitpic-theme') || 'light';
+    const savedTheme = localStorage.getItem(APP_CONSTANTS.STORAGE.THEME) || APP_CONSTANTS.DEFAULTS.THEME;
     document.body.classList.toggle('dark-mode', savedTheme === 'dark');
     
     // Add click handler to navigation toggle button

@@ -1,22 +1,45 @@
 # FitPic iOS App - Development Tracker
 
-## 🔴 ACTIVE TASKS
-- [ ] Implement user profile page with settings
-- [ ] Add outfit favoriting functionality  
-- [ ] Create outfit detail view with purchase links
-- [ ] Implement search and filter improvements
-- [ ] Add push notifications for new outfits
+## 🟢 ACTIVE TASKS
+- [x] Phase 2: Organize functions by feature
+    - [x] Add section headers to group related functions
+    - [x] Keep functions in logical order (no reordering needed)
+    - [x] Remove duplicate functions (removed duplicate showToast)
+
+## 🔴 UPCOMING TASKS
+- [ ] Phase 3: CSS organization
+    - [ ] Add section comments to group related styles
+    - [ ] Consolidate duplicate CSS rules
+    - [ ] Organize styles by component/page
+- [ ] Phase 4: State management
+    - [ ] Create unified appState object
+    - [ ] Add getter/setter functions
+    - [ ] Centralize localStorage sync
+- [ ] Phase 5: Event handlers
+    - [ ] Use event delegation for dynamic elements
+    - [ ] Remove inline onclick attributes
+    - [ ] Centralize event listener setup
 
 ## 📋 CURRENT PLAN
-**Goal**: Complete core user features
-**Priority**: Profile → Favorites → Detail View
-**Timeline**: 3-5 work sessions
+**Goal**: Refactor script.js and styles.css for better maintainability
+**Priority**: Function Organization → CSS → State → Events
+**Timeline**: 2-3 work sessions
 
 ---
 
 ## ✅ COMPLETED WORK
 
-### Session 4: Workflow Updates (Dec 2024)
+### Session 5: Code Refactoring - Phase 1 & 2
+**Tasks**: Extract constants and configuration to separate files
+- Created constants.js with all app constants (timings, limits, messages)
+- Moved country data to data/countries.js (48 countries)
+- Extracted outfit data to data/outfits.js (6 outfits)
+- Updated script.js to use constants instead of hardcoded values
+- Replaced localStorage keys and animation timings with constants
+- Result: Cleaner code with centralized configuration
+- **Phase 2 Complete**: Added 10+ section headers, removed duplicate showToast function
+
+### Session 4: Workflow Updates
 **Tasks**: Redesigned todo.md format, added grouped commit strategy
 - Updated CLAUDE.md with grouped commit strategy to prevent flooding
 - Redesigned todo.md format (188 → 34 lines, 82% reduction)
@@ -43,23 +66,3 @@
 - Added 1.5s delay before home navigation
 - Fixed setInterval and clearInterval logic
 - Result: Smooth onboarding → processing → home flow
-
----
-
-## 📚 ARCHIVED HISTORY
-
-<details>
-<summary>Older Sessions (Click to expand)</summary>
-
-### Initial Setup & Architecture
-- Created single-page web app structure
-- Implemented authentication flow
-- Built onboarding questionnaire
-- Set up outfit feed with sample data
-
-### Technical Details
-- **Stack**: HTML, CSS, JavaScript (vanilla)
-- **Features**: Auth, onboarding, feed, filters, cart
-- **Known Issues**: All critical bugs resolved ✅
-
-</details>
