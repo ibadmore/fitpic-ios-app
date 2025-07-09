@@ -48,21 +48,40 @@ Use this condensed format for maintaining the todo.md file:
 
 ---
 
-## ✅ COMPLETED SESSIONS
+## ✅ COMPLETED WORK
 
-### Session N: [Session Title] (Date/Status)
-- Brief bullet point of what was accomplished
-- Another accomplishment
-- Key fixes or features added
+### Session N: [Session Title] (Date)
+**Tasks**: One-line summary of session focus
+- Specific accomplishment with relevant details
+- **Bug/Feature Name**: What was fixed/added and key details
+- Another task with outcome (e.g., fixed X → Y)
+- Results: Final outcome or status
 
 ### Session N-1: [Previous Session Title]
-- Previous session accomplishments
-- Keep only 3-4 recent sessions visible
+**Problem**: Brief problem statement if applicable
+**Solution**: How it was resolved
+- Implementation detail 1
+- Implementation detail 2
+- Result: Outcome achieved
+
+---
+
+## 📚 ARCHIVED HISTORY
+
+<details>
+<summary>Older Sessions (Click to expand)</summary>
+
+### Older session summaries
+- Move sessions here after 4-5 recent ones
+- Keep condensed but preserve key details
+
+</details>
 ```
 
 **Format Guidelines**:
 - Keep active tasks to 5-7 items maximum
-- Use brief, action-oriented descriptions
-- Session summaries should be 3-5 bullet points
-- Remove old sessions after 4-5 are listed
-- Use emojis sparingly for visual clarity (🔴 active, ✅ complete, 📋 planning)
+- Include **bold labels** for problems, solutions, errors, features
+- Preserve technical details (e.g., function names, error messages)
+- Use arrows → to show transformations or fixes
+- Archive older sessions in collapsible section
+- Maintain task context while being concise
