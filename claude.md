@@ -29,3 +29,40 @@
 - **Session-based**: At minimum, commit once per work session when substantial progress is made
 - **Quality over quantity**: Better to have fewer meaningful commits than many small ones
 - **Emergency commits**: Only commit immediately for critical fixes that need to be saved urgently
+
+## Todo.md Template:
+Use this condensed format for maintaining the todo.md file:
+
+```markdown
+# [Project Name] - Development Tracker
+
+## 🔴 ACTIVE TASKS
+- [ ] Current task 1 (brief description)
+- [ ] Current task 2 (brief description)
+- [ ] Current task 3 (brief description)
+
+## 📋 CURRENT PLAN
+**Goal**: Main objective for current work
+**Priority**: Task order (Task1 → Task2 → Task3)
+**Timeline**: Expected sessions to complete
+
+---
+
+## ✅ COMPLETED SESSIONS
+
+### Session N: [Session Title] (Date/Status)
+- Brief bullet point of what was accomplished
+- Another accomplishment
+- Key fixes or features added
+
+### Session N-1: [Previous Session Title]
+- Previous session accomplishments
+- Keep only 3-4 recent sessions visible
+```
+
+**Format Guidelines**:
+- Keep active tasks to 5-7 items maximum
+- Use brief, action-oriented descriptions
+- Session summaries should be 3-5 bullet points
+- Remove old sessions after 4-5 are listed
+- Use emojis sparingly for visual clarity (🔴 active, ✅ complete, 📋 planning)
