@@ -400,11 +400,6 @@
                 </div>
             </div>
 
-            <div class="processing-status">
-                <h2 class="headline-text" id="processing-text">Analyzing your style...</h2>
-                <p class="body-text" id="processing-subtitle">Understanding your preferences and body type</p>
-            </div>
-
             <div class="error-state" id="processing-error" style="display: none;">
                 <div class="error-icon">⚠️</div>
                 <h2 class="headline-text">Something went wrong</h2>
@@ -457,7 +452,12 @@
             </div>
 
             <main class="outfit-feed">
-                <div class="outfit-card-full">
+                <div class="outfit-card-full"
+                     data-filter-categories="date-night"
+                     data-filter-location="new-york los-angeles paris"
+                     data-filter-style="boho casual"
+                     data-filter-event="date-night casual"
+                     data-filter-season="spring summer">
                     <div class="outfit-image-container" onclick="navigateToOutfitDetail(1)">
                         <img src="outfit images/fitpic_1.webp" alt="Outfit" class="outfit-image">
                         <div class="outfit-actions">
@@ -492,7 +492,12 @@
                 </div>
 
                 <!-- Additional outfit cards -->
-                <div class="outfit-card-full">
+                <div class="outfit-card-full"
+                     data-filter-categories="cold-days"
+                     data-filter-location="london new-york tokyo"
+                     data-filter-style="casual minimalist"
+                     data-filter-event="casual work"
+                     data-filter-season="fall spring">
                     <div class="outfit-image-container" onclick="navigateToOutfitDetail(2)">
                         <img src="outfit images/fitpic_2.webp" alt="Outfit" class="outfit-image">
                         <div class="outfit-actions">
@@ -527,7 +532,12 @@
                 </div>
 
                 <!-- Additional outfit cards -->
-                <div class="outfit-card-full">
+                <div class="outfit-card-full"
+                     data-filter-categories="wedding-guest"
+                     data-filter-location="milan paris london"
+                     data-filter-style="elegant classic"
+                     data-filter-event="wedding work"
+                     data-filter-season="spring fall">
                     <div class="outfit-image-container" onclick="navigateToOutfitDetail(3)">
                         <img src="outfit images/fitpic_3.webp" alt="Outfit" class="outfit-image">
                         <div class="outfit-actions">
@@ -561,7 +571,12 @@
                     </div>
                 </div>
 
-                <div class="outfit-card-full">
+                <div class="outfit-card-full"
+                     data-filter-categories="cold-days"
+                     data-filter-location="new-york tokyo london"
+                     data-filter-style="streetwear casual"
+                     data-filter-event="casual travel"
+                     data-filter-season="winter fall">
                     <div class="outfit-image-container" onclick="navigateToOutfitDetail(4)">
                         <img src="outfit images/fitpic_4.webp" alt="Outfit" class="outfit-image">
                         <div class="outfit-actions">
@@ -954,6 +969,189 @@
         </div>
     </div>
 
+    <!-- Filter Modal -->
+    <div id="filter-modal" class="filter-modal">
+        <div class="filter-backdrop" onclick="closeFilterModal()"></div>
+        <div class="filter-content">
+            <div class="filter-header">
+                <h2 class="filter-title">Filter Outfits</h2>
+                <button class="filter-close" onclick="closeFilterModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="filter-categories">
+                <!-- Location Filter -->
+                <div class="filter-category">
+                    <div class="filter-category-header" onclick="toggleFilterCategory('location')">
+                        <div class="filter-category-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 1C6.79086 1 4 3.79086 4 7C4 11.5 10 19 10 19C10 19 16 11.5 16 7C16 3.79086 13.2091 1 10 1Z" stroke="currentColor" stroke-width="1.5"/>
+                                <circle cx="10" cy="7" r="2" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <span class="filter-category-title">Location</span>
+                        <svg class="filter-category-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="filter-options" id="location-options">
+                        <label class="filter-option">
+                            <input type="checkbox" name="location" value="new-york">
+                            <span class="filter-option-text">New York</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="location" value="los-angeles">
+                            <span class="filter-option-text">Los Angeles</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="location" value="london">
+                            <span class="filter-option-text">London</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="location" value="paris">
+                            <span class="filter-option-text">Paris</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="location" value="tokyo">
+                            <span class="filter-option-text">Tokyo</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="location" value="milan">
+                            <span class="filter-option-text">Milan</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Style Filter -->
+                <div class="filter-category">
+                    <div class="filter-category-header" onclick="toggleFilterCategory('style')">
+                        <div class="filter-category-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16 4H4C2.89543 4 2 4.89543 2 6V14C2 15.1046 2.89543 16 4 16H16C17.1046 16 18 15.1046 18 14V6C18 4.89543 17.1046 4 16 4Z" stroke="currentColor" stroke-width="1.5"/>
+                                <circle cx="7" cy="7" r="1" fill="currentColor"/>
+                                <path d="M14 14L11 11L8 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <span class="filter-category-title">Style</span>
+                        <svg class="filter-category-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="filter-options" id="style-options">
+                        <label class="filter-option">
+                            <input type="checkbox" name="style" value="minimalist">
+                            <span class="filter-option-text">Minimalist</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="style" value="streetwear">
+                            <span class="filter-option-text">Streetwear</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="style" value="classic">
+                            <span class="filter-option-text">Classic</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="style" value="boho">
+                            <span class="filter-option-text">Boho</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="style" value="preppy">
+                            <span class="filter-option-text">Preppy</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="style" value="elegant">
+                            <span class="filter-option-text">Elegant</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Event Filter -->
+                <div class="filter-category">
+                    <div class="filter-category-header" onclick="toggleFilterCategory('event')">
+                        <div class="filter-category-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <rect x="3" y="4" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M8 2V6M12 2V6M3 10H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span class="filter-category-title">Event</span>
+                        <svg class="filter-category-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="filter-options" id="event-options">
+                        <label class="filter-option">
+                            <input type="checkbox" name="event" value="work">
+                            <span class="filter-option-text">Work</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="event" value="date-night">
+                            <span class="filter-option-text">Date Night</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="event" value="wedding">
+                            <span class="filter-option-text">Wedding</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="event" value="casual">
+                            <span class="filter-option-text">Casual</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="event" value="party">
+                            <span class="filter-option-text">Party</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="event" value="travel">
+                            <span class="filter-option-text">Travel</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Season Filter -->
+                <div class="filter-category">
+                    <div class="filter-category-header" onclick="toggleFilterCategory('season')">
+                        <div class="filter-category-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M10 1V3M10 17V19M19 10H17M3 10H1M16.36 16.36L14.95 14.95M5.05 5.05L3.64 3.64M16.36 3.64L14.95 5.05M5.05 14.95L3.64 16.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span class="filter-category-title">Season</span>
+                        <svg class="filter-category-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="filter-options" id="season-options">
+                        <label class="filter-option">
+                            <input type="checkbox" name="season" value="spring">
+                            <span class="filter-option-text">Spring</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="season" value="summer">
+                            <span class="filter-option-text">Summer</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="season" value="fall">
+                            <span class="filter-option-text">Fall</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="season" value="winter">
+                            <span class="filter-option-text">Winter</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <button class="filter-clear-btn" onclick="clearAllFilters()">Clear All</button>
+                <button class="filter-apply-btn" onclick="applyFilters()">Apply Filters</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Fullscreen Image Modal -->
     <div id="fullscreen-modal" class="fullscreen-modal">
         <div class="modal-overlay" onclick="closeFullscreenModal()"></div>
@@ -970,9 +1168,9 @@
     </div>
 
     <!-- Collapsible Navigation -->
-    <div class="nav-overlay" id="nav-overlay" onclick="toggleNavigation()"></div>
+    <div class="nav-overlay" id="nav-overlay"></div>
     
-    <button class="nav-toggle-btn" id="nav-toggle" onclick="toggleNavigation()">
+    <button class="nav-toggle-btn" id="nav-toggle">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -980,14 +1178,14 @@
     
     <nav class="collapsible-nav" id="collapsible-nav">
         <div class="nav-panel">
-            <button class="nav-close-btn" onclick="toggleNavigation()">
+            <button class="nav-close-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
             
             <div class="nav-items">
-                <button class="nav-item" data-tab="outfits" onclick="navigateToTab('outfits')">
+                <button class="nav-item" data-page="home">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
                         <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
@@ -996,13 +1194,13 @@
                     </svg>
                 </button>
                 
-                <button class="nav-item" data-tab="favs" onclick="navigateToTab('favs')">
+                <button class="nav-item" data-page="wishlist">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.041 1.5487 8.5C1.5487 9.959 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.8792 21.7563 11.2728 22.0329 10.6053C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39467C21.7563 5.72723 21.351 5.1208 20.84 4.61V4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
                 
-                <button class="nav-item" data-tab="cart" onclick="navigateToTab('cart')">
+                <button class="nav-item" data-page="shopping-bag">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" stroke="currentColor" stroke-width="2"/>
                         <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" stroke="currentColor" stroke-width="2"/>
@@ -1011,7 +1209,7 @@
                     <div class="cart-badge" id="nav-cart-badge" style="display: none;">0</div>
                 </button>
                 
-                <button class="nav-item" data-tab="settings" onclick="navigateToTab('settings')">
+                <button class="nav-item" data-page="settings">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
                         <path d="M12 1V6M12 18V23M4.22 4.22L7.76 7.76M16.24 16.24L19.78 19.78M1 12H6M18 12H23M4.22 19.78L7.76 16.24M16.24 7.76L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -1029,7 +1227,7 @@
                         </svg>
                     </span>
                     <div class="toggle-switch">
-                        <input type="checkbox" id="nav-dark-mode-toggle" onchange="toggleTheme()">
+                        <input type="checkbox" id="nav-dark-mode-toggle">
                         <span class="toggle-slider"></span>
                     </div>
                 </label>

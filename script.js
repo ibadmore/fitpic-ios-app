@@ -778,9 +778,10 @@ function toggleNavigation() {
     
     if (!nav || !overlay) return;
     
-    isNavigationExpanded = !isNavigationExpanded;
+    const isExpanded = getState('ui.isNavigationExpanded');
+    setState('ui.isNavigationExpanded', !isExpanded);
     
-    if (isNavigationExpanded) {
+    if (!isExpanded) {
         nav.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden'; // Prevent scrolling when nav is open
@@ -792,13 +793,13 @@ function toggleNavigation() {
 }
 
 function expandNavigation() {
-    if (!isNavigationExpanded) {
+    if (!getState('ui.isNavigationExpanded')) {
         toggleNavigation();
     }
 }
 
 function collapseNavigation() {
-    if (isNavigationExpanded) {
+    if (getState('ui.isNavigationExpanded')) {
         toggleNavigation();
     }
 }
@@ -960,9 +961,7 @@ function startProcessingAnimation() {
     // Hide error state if visible
     document.getElementById('processing-error').style.display = 'none';
     document.querySelector('.processing-animation').style.display = 'flex';
-    document.querySelector('.processing-status').style.display = 'block';
     
-    updateProcessingText();
     startInsightCycle();
     
     // Simulate random error for demo based on configured probability
@@ -970,9 +969,7 @@ function startProcessingAnimation() {
     
     const interval = setInterval(() => {
         setState('processing.processingIndex', getState('processing.processingIndex') + 1);
-        if (getState('processing.processingIndex') < processingSteps.length) {
-            updateProcessingText();
-        } else {
+        if (getState('processing.processingIndex') >= processingSteps.length) {
             clearInterval(interval);
             
             if (shouldError) {
@@ -992,29 +989,11 @@ function startProcessingAnimation() {
 
 function showProcessingError() {
     document.querySelector('.processing-animation').style.display = 'none';
-    document.querySelector('.processing-status').style.display = 'none';
     document.getElementById('processing-error').style.display = 'block';
 }
 
 function retryProcessing() {
     startProcessingAnimation();
-}
-
-function updateProcessingText() {
-    const processingText = document.getElementById('processing-text');
-    const processingSubtitle = document.getElementById('processing-subtitle');
-    
-    processingText.textContent = processingSteps[getState('processing.processingIndex')];
-    processingSubtitle.textContent = processingSubtitles[getState('processing.processingIndex')];
-    
-    // Add gentle animation to text changes
-    processingText.style.opacity = '0';
-    processingSubtitle.style.opacity = '0';
-    
-    setTimeout(() => {
-        processingText.style.opacity = '1';
-        processingSubtitle.style.opacity = '1';
-    }, 300);
 }
 
 function startInsightCycle() {
@@ -1143,6 +1122,11 @@ function filterOutfits(filter) {
             card.style.display = 'none';
         }
     });
+    
+    // Clear modal filters when using tag filters
+    if (Object.values(activeFilters).some(arr => arr.length > 0)) {
+        clearAllFilters();
+    }
 }
 
 // Show all outfits when no filter is active
@@ -1155,8 +1139,7 @@ function showAllOutfits() {
 }
 
 function toggleFilterMenu() {
-    // For demo purposes, show a message
-    alert('Filter menu with more style options coming soon!');
+    openFilterModal();
 }
 
 // Like button functionality
@@ -1188,7 +1171,12 @@ function generateOutfitCard(outfit) {
     ).join('');
 
     return `
-        <div class="outfit-card-full" data-filter-categories="${outfit.filterCategories.join(' ')}">
+        <div class="outfit-card-full" 
+             data-filter-categories="${outfit.filterCategories.join(' ')}"
+             data-filter-location="${outfit.filterLocation?.join(' ') || ''}"
+             data-filter-style="${outfit.filterStyle?.join(' ') || ''}"
+             data-filter-event="${outfit.filterEvent?.join(' ') || ''}"
+             data-filter-season="${outfit.filterSeason?.join(' ') || ''}">
             <div class="outfit-image-container">
                 <img src="${outfit.image}" alt="Outfit" class="outfit-image">
                 <div class="outfit-actions">
@@ -3348,6 +3336,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Setup category filtering for outfit detail page
     setupCategoryFiltering();
+    
+    // Setup filter modal
+    setupFilterModal();
 }); 
 
 // Product data for filtering
@@ -3423,4 +3414,189 @@ function filterProductsByCategory(category) {
             </button>
         </div>
     `).join('');
+}
+
+// ============================================
+// FILTER MODAL FUNCTIONALITY
+// ============================================
+
+// Global filter state
+let activeFilters = {
+    location: [],
+    style: [],
+    event: [],
+    season: []
+};
+
+// Setup filter modal
+function setupFilterModal() {
+    // Add escape key listener
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeFilterModal();
+        }
+    });
+    
+    // Setup filter option change listeners
+    document.querySelectorAll('.filter-option input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', updateFilterCount);
+    });
+}
+
+// Open filter modal
+function openFilterModal() {
+    const modal = document.getElementById('filter-modal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Auto-expand the first category (Location)
+    setTimeout(() => {
+        toggleFilterCategory('location');
+    }, 100);
+}
+
+// Close filter modal
+function closeFilterModal() {
+    const modal = document.getElementById('filter-modal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Toggle filter category expansion
+function toggleFilterCategory(categoryName) {
+    const category = document.querySelector(`#${categoryName}-options`).closest('.filter-category');
+    const isExpanded = category.classList.contains('expanded');
+    
+    // Close all other categories
+    document.querySelectorAll('.filter-category').forEach(cat => {
+        cat.classList.remove('expanded');
+    });
+    
+    // Toggle current category
+    if (!isExpanded) {
+        category.classList.add('expanded');
+    }
+}
+
+// Update filter count and UI
+function updateFilterCount() {
+    const applyButton = document.querySelector('.filter-apply-btn');
+    const totalSelected = document.querySelectorAll('.filter-option input[type="checkbox"]:checked').length;
+    
+    if (totalSelected > 0) {
+        applyButton.textContent = `Apply Filters (${totalSelected})`;
+        applyButton.disabled = false;
+    } else {
+        applyButton.textContent = 'Apply Filters';
+        applyButton.disabled = false;
+    }
+}
+
+// Clear all filters
+function clearAllFilters() {
+    // Uncheck all checkboxes
+    document.querySelectorAll('.filter-option input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    
+    // Reset filter state
+    activeFilters = {
+        location: [],
+        style: [],
+        event: [],
+        season: []
+    };
+    
+    // Update UI
+    updateFilterCount();
+    updateFilterButtonText();
+    
+    // Show all outfits
+    showAllOutfits();
+    
+    // Reset existing filter tags
+    document.querySelectorAll('.filter-tag').forEach(tag => {
+        tag.classList.remove('active');
+    });
+}
+
+// Apply filters
+function applyFilters() {
+    // Collect selected filters
+    activeFilters = {
+        location: [],
+        style: [],
+        event: [],
+        season: []
+    };
+    
+    document.querySelectorAll('.filter-option input[type="checkbox"]:checked').forEach(checkbox => {
+        const category = checkbox.name;
+        const value = checkbox.value;
+        if (activeFilters[category]) {
+            activeFilters[category].push(value);
+        }
+    });
+    
+    // Apply filters to outfit cards
+    filterOutfitsByMultipleCategories();
+    
+    // Update filter button text
+    updateFilterButtonText();
+    
+    // Close modal
+    closeFilterModal();
+    
+    // Show toast notification
+    const filterCount = Object.values(activeFilters).flat().length;
+    if (filterCount > 0) {
+        showToast(`Applied ${filterCount} filter${filterCount > 1 ? 's' : ''}`);
+    }
+}
+
+// Filter outfits by multiple categories
+function filterOutfitsByMultipleCategories() {
+    const outfitCards = document.querySelectorAll('.outfit-card-full');
+    
+    outfitCards.forEach(card => {
+        let shouldShow = true;
+        
+        // Check each filter category
+        Object.keys(activeFilters).forEach(category => {
+            const selectedValues = activeFilters[category];
+            if (selectedValues.length > 0) {
+                const cardCategories = card.getAttribute(`data-filter-${category}`);
+                if (!cardCategories || cardCategories.trim() === '') {
+                    shouldShow = false;
+                    return;
+                }
+                
+                const cardCategoryArray = cardCategories.split(' ').filter(Boolean);
+                const hasMatch = selectedValues.some(value => cardCategoryArray.includes(value));
+                
+                if (!hasMatch) {
+                    shouldShow = false;
+                }
+            }
+        });
+        
+        if (shouldShow) {
+            card.style.display = 'block';
+            card.style.animation = 'fadeIn 0.3s ease-in';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+// Update filter button text
+function updateFilterButtonText() {
+    const filterButton = document.querySelector('.filter-button span');
+    const totalFilters = Object.values(activeFilters).flat().length;
+    
+    if (totalFilters > 0) {
+        filterButton.textContent = `Filter Styles (${totalFilters})`;
+    } else {
+        filterButton.textContent = 'Filter Styles';
+    }
 }

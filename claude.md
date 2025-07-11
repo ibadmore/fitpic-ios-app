@@ -5,7 +5,7 @@
 5. Please every step of the way just give me a high level explanation of what changes you made
 6. Make every task and code change you do as simple as possible. We want to avoid making any massive or complex changes. Every change should impact as little code as possible. Everything is about simplicity.
 7. Finally after completing a logical group of work or major milestone:
-   a. Add a review section to the [tasks/todo.md] file with a summary of the changes you made and any other relevant information (max of 250 characters)
+   a. Add a review section to the [tasks/todo.md] file with a summary of the changes you made and any other relevant information (max of 100 characters)
    b. **AUTOMATICALLY commit and push to GitHub using these commands:**
       - `git add .` (stage all changes)
       - `git commit -m "Brief descriptive message of what was completed"`
@@ -79,5 +79,5 @@ Use this condensed format for maintaining the todo.md file:
 - Include **bold labels** for problems, solutions, errors, features
 - Preserve technical details (e.g., function names, error messages)
 - Use arrows → to show transformations or fixes
-- Archive older sessions in collapsible section
+- Archive older sessions in collapsible section and keep archive to max 150 characters
 - Maintain task context while being concise
