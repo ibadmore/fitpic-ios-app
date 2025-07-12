@@ -133,7 +133,7 @@
             <div id="step-2" class="onboarding-step">
                 <div class="step-content centered">
                     <div class="brand-section">
-                        <h3 class="form-label">Select any that match your style</h3>
+                        <h3 class="form-label">Select brands that match your style</h3>
                         <div class="brand-tags">
                             <button class="brand-tag selected" data-brand="nike">Nike</button>
                             <button class="brand-tag" data-brand="adidas">Adidas</button>
@@ -150,6 +150,16 @@
                             <button class="brand-tag" data-brand="gap">Gap</button>
                             <button class="brand-tag" data-brand="levis">Levi's</button>
                             <button class="brand-tag" data-brand="aritzia">Aritzia</button>
+                            <button class="brand-tag" data-brand="asos">ASOS</button>
+                            <button class="brand-tag" data-brand="nordstrom">Nordstrom</button>
+                            <button class="brand-tag" data-brand="jcrew">J.Crew</button>
+                            <button class="brand-tag" data-brand="anthropologie">Anthropologie</button>
+                            <button class="brand-tag" data-brand="urban-outfitters">Urban Outfitters</button>
+                            <button class="brand-tag" data-brand="free-people">Free People</button>
+                            <button class="brand-tag" data-brand="lululemon">Lululemon</button>
+                            <button class="brand-tag" data-brand="outdoor-voices">Outdoor Voices</button>
+                            <button class="brand-tag" data-brand="theory">Theory</button>
+                            <button class="brand-tag" data-brand="acne-studios">Acne Studios</button>
                         </div>
                     </div>
                 </div>
@@ -161,7 +171,7 @@
             <div id="step-3" class="onboarding-step">
                 <div class="step-content centered">
                     <div class="events-section">
-                        <h3 class="form-label">What occasions do you dress for?</h3>
+                        <h3 class="form-label">Which occasions matter most to you?</h3>
                         <div class="event-tags">
                             <button class="event-tag" data-event="work">💼 Work</button>
                             <button class="event-tag" data-event="casual">👕 Casual</button>
@@ -199,6 +209,11 @@
                             <button class="aesthetic-tag" data-aesthetic="casual">Casual</button>
                             <button class="aesthetic-tag" data-aesthetic="glam">Glam</button>
                             <button class="aesthetic-tag" data-aesthetic="cottagecore">Cottagecore</button>
+                            <button class="aesthetic-tag" data-aesthetic="dark-academia">Dark Academia</button>
+                            <button class="aesthetic-tag" data-aesthetic="y2k">Y2K</button>
+                            <button class="aesthetic-tag" data-aesthetic="soft-girl">Soft Girl</button>
+                            <button class="aesthetic-tag" data-aesthetic="coastal-grandma">Coastal Grandma</button>
+                            <button class="aesthetic-tag" data-aesthetic="normcore">Normcore</button>
                         </div>
                     </div>
                 </div>
@@ -427,26 +442,67 @@
             </header>
 
             <div class="filter-tags-section">
-                <button class="filter-tag" data-filter="cold-days">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M8 2v2m0 8v2M2 8h2m8 0h2m-9.5-3.5L3 6m10 0l-1.5-1.5m0 7L13 13m-10 0l1.5-1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
-                    </svg>
-                    <span>Cold Days</span>
-                </button>
-                <button class="filter-tag active" data-filter="date-night">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M8 3.5C8 5.5 6 7.5 6 9.5c0 1 .5 2 2 2s2-1 2-2c0-2-2-4-2-6z" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="M4 11c0 2 2 3 4 3s4-1 4-3" stroke="currentColor" stroke-width="1.5"/>
-                    </svg>
-                    <span>Date Night Outfit</span>
-                </button>
-                <button class="filter-tag" data-filter="wedding-guest">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M8 7v6m-3-3h6M8 2l1 2h2l-1 2-1 2-1-2-1-2h2l1-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Wedding Guest</span>
-                </button>
+                <div class="filter-tags-container">
+                    <button class="filter-tag" data-filter="cold-days">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 2v2m0 8v2M2 8h2m8 0h2m-9.5-3.5L3 6m10 0l-1.5-1.5m0 7L13 13m-10 0l1.5-1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                        <span>Cold Days</span>
+                    </button>
+                    <button class="filter-tag active" data-filter="date-night">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 3.5C8 5.5 6 7.5 6 9.5c0 1 .5 2 2 2s2-1 2-2c0-2-2-4-2-6z" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M4 11c0 2 2 3 4 3s4-1 4-3" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                        <span>Date Night Outfit</span>
+                    </button>
+                    <button class="filter-tag" data-filter="wedding-guest">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 7v6m-3-3h6M8 2l1 2h2l-1 2-1 2-1-2-1-2h2l1-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Wedding Guest</span>
+                    </button>
+                    <button class="filter-tag" data-filter="work-formal">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M4 6V4a4 4 0 118 0v2M2 6h12l1 8H1l1-8z" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                        <span>Work Formal</span>
+                    </button>
+                    <button class="filter-tag" data-filter="casual-weekend">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                        <span>Casual Weekend</span>
+                    </button>
+                    <button class="filter-tag" data-filter="party-night">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 1l2 6h5l-4 3 1.5 4.5L8 11l-4.5 3.5L5 10l-4-3h5l2-6z" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                        <span>Party Night</span>
+                    </button>
+                    <!-- Duplicate for seamless loop -->
+                    <button class="filter-tag" data-filter="cold-days">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 2v2m0 8v2M2 8h2m8 0h2m-9.5-3.5L3 6m10 0l-1.5-1.5m0 7L13 13m-10 0l1.5-1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                        <span>Cold Days</span>
+                    </button>
+                    <button class="filter-tag active" data-filter="date-night">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 3.5C8 5.5 6 7.5 6 9.5c0 1 .5 2 2 2s2-1 2-2c0-2-2-4-2-6z" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M4 11c0 2 2 3 4 3s4-1 4-3" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                        <span>Date Night Outfit</span>
+                    </button>
+                    <button class="filter-tag" data-filter="wedding-guest">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 7v6m-3-3h6M8 2l1 2h2l-1 2-1 2-1-2-1-2h2l1-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Wedding Guest</span>
+                    </button>
+                </div>
             </div>
 
             <main class="outfit-feed">

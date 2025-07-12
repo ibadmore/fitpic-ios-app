@@ -1359,10 +1359,11 @@ body {
 .camera-container {
     flex: 1;
     position: relative;
-    background: #000;
+    background: transparent;
     border-radius: var(--radius-xl);
     overflow: hidden;
     margin: var(--space-4);
+    border: 2px dashed var(--border-color);
 }
 
 .camera-overlay {
@@ -1373,7 +1374,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     padding: var(--space-6);
-    color: white;
+    color: var(--text-primary);
 }
 
 .guidance-text {
@@ -1670,9 +1671,30 @@ body {
     display: flex;
     gap: var(--space-3);
     padding-bottom: var(--space-5);
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    overflow: hidden;
+    position: relative;
+    mask: linear-gradient(90deg, transparent, white 20px, white calc(100% - 20px), transparent);
+    -webkit-mask: linear-gradient(90deg, transparent, white 20px, white calc(100% - 20px), transparent);
+}
+
+.filter-tags-container {
+    display: flex;
+    gap: var(--space-3);
+    animation: scroll-tags 25s linear infinite;
+    width: max-content;
+}
+
+.filter-tags-container:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll-tags {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 .filter-tags-section::-webkit-scrollbar {

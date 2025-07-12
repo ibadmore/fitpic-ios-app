@@ -1,32 +1,51 @@
-# FitPic Navigation & Settings Enhancement
+# FitPic Phase 7 - UI Improvements & Auto-Scrolling Tags
 
 ## 🟢 ACTIVE TASKS
 
-### Navigation Icon Updates
-- [ ] Change settings icon from sun to gear icon
-- [ ] Change home icon from tiles/grid to house icon
-- [ ] Ensure all navigation icons are properly sized and aligned
+### Priority 1: Auto-Scrolling Filter Tags
+- [ ] Implement auto-scrolling animation for filter tags section
+- [ ] Add looping functionality for smooth continuous scroll
+- [ ] Optimize performance for 60fps animation
+- [ ] Test on mobile devices for smooth touch interaction
 
-### Filter Button Text Update
-- [ ] Remove "Styles" from filter button text (change "Filter Styles" to "Filter")
+### Priority 2: Onboarding Content Improvements
+- [ ] Add more brands to onboarding page 2 (expand from 15 to 25+ brands)
+- [ ] Update brand section copy to "Select brands that match your style"
+- [ ] Create new engaging copy for "What occasions do you dress for?" section
+- [ ] Add more aesthetic options to style selection (expand from 15 to 20+ options)
 
-### Settings Page Enhancement
-- [ ] Add comprehensive styling to settings page to match app design
-- [ ] Implement edit profile functionality with inline editing
-- [ ] Add proper visual styling for settings sections and items
-- [ ] Ensure responsive design for mobile
+### Priority 3: Camera Upload UI Polish
+- [ ] Remove black background from camera upload sections
+- [ ] Make camera upload backgrounds transparent
+- [ ] Improve visual consistency across photo upload steps
 
-### Navigation State & Styling
-- [ ] Update navigation state handling for new icons
-- [ ] Verify proper icon alignment and touch targets (44x44pt minimum)
-- [ ] Test navigation functionality across all pages
+### Priority 4: UI Element Distinction
+- [ ] Reduce tag-heavy feeling throughout app
+- [ ] Improve visual distinction between clickable vs non-clickable elements
+- [ ] Standardize hover/active states for better UX
+
+### Priority 5: Weather Integration
+- [ ] Implement temperature overlay on weather/outfit images
+- [ ] Add large temperature display with small description text
+- [ ] Ensure readable contrast and positioning
+
+### Priority 6: Color Palette Standardization
+- [ ] Review and standardize color palette across all components
+- [ ] Reduce visual confusion from inconsistent colors
+- [ ] Update CSS variables for better consistency
+
+### Priority 7: New Pages Implementation
+- [ ] Create favorites page with category buckets
+- [ ] Add carousels for favorites organization
+- [ ] Implement checkout page for cart functionality
+- [ ] Connect cart items to checkout flow
 
 ## 📋 CURRENT PLAN
-**Goal**: Update navigation icons and enhance settings page styling
-**Priority**: Icon updates → Filter text → Settings styling → Profile editing
-**Focus**: Consistent visual design and improved UX
+**Goal**: Complete Phase 7 UI improvements and new functionality
+**Priority**: Auto-scrolling tags → Onboarding improvements → UI polish → New pages
+**Focus**: Mobile-first design with smooth animations and better UX
 
 ---
 
 ## ✅ COMPLETED WORK
-(To be updated as tasks are completed)
+(Tasks will be moved here as completed)
