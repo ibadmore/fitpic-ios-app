@@ -685,6 +685,12 @@ function initializeApp() {
     // Add touch feedback to buttons
     addTouchFeedback();
     
+    // Initialize enhanced lazy loading system
+    initializeLazyLoading();
+    
+    // Setup enhanced image click handling
+    setupImageClickHandling();
+    
     // Initialize cart badge
     updateCartBadge();
     
@@ -1333,11 +1339,16 @@ function loadUserRatings() {
     });
 }
 
-// Skeleton Loading Functions
+// Enhanced Skeleton Loading Functions
 function createSkeletonOutfitCard() {
     return `
         <div class="skeleton-outfit-card">
-            <div class="skeleton-image skeleton"></div>
+            <div class="skeleton-image skeleton">
+                <div class="skeleton-actions">
+                    <div class="skeleton-action-button skeleton"></div>
+                    <div class="skeleton-action-button skeleton"></div>
+                </div>
+            </div>
             <div class="skeleton-tags">
                 <div class="skeleton-tag skeleton"></div>
                 <div class="skeleton-tag skeleton"></div>
@@ -2233,42 +2244,101 @@ function proceedToCheckout() {
     }, 2000);
 }
 
-// Simple lazy loading implementation
+// Enhanced Lazy Loading Implementation with Performance Optimization
 function initializeLazyLoading() {
     const images = document.querySelectorAll('.outfit-card-full .outfit-image');
     
+    // Optimize intersection observer with better settings
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
+                const container = img.closest('.outfit-image-container');
                 
-                // Ensure the image fills the container properly
+                // Add loading overlay
+                const loadingOverlay = document.createElement('div');
+                loadingOverlay.className = 'image-loading-overlay';
+                container.appendChild(loadingOverlay);
+                
+                // Set up image loading
+                const imageUrl = img.src;
+                const tempImage = new Image();
+                
+                tempImage.onload = () => {
+                    // Image loaded successfully
+                    img.classList.add('loaded');
+                    loadingOverlay.remove();
+                    
+                    // Add smooth fade-in effect
+                    requestAnimationFrame(() => {
+                        img.style.opacity = '1';
+                    });
+                };
+                
+                tempImage.onerror = () => {
+                    // Handle image loading error
+                    img.classList.add('error');
+                    loadingOverlay.remove();
+                    
+                    // Show fallback or retry mechanism
+                    console.warn('Failed to load image:', imageUrl);
+                    img.style.opacity = '0.5';
+                };
+                
+                // Start loading the image
+                tempImage.src = imageUrl;
+                
+                // Ensure proper styling
                 img.style.width = '100%';
                 img.style.height = '100%';
                 img.style.objectFit = 'cover';
                 img.style.objectPosition = 'center';
                 img.style.display = 'block';
                 
-                img.style.transition = 'opacity 0.3s ease-in-out';
-                
-                img.onload = () => {
-                    img.style.opacity = '1';
-                };
-                
-                // If image is already loaded
-                if (img.complete) {
-                    img.style.opacity = '1';
-                } else {
-                    img.style.opacity = '0';
-                }
-                
+                // Remove from observer
                 observer.unobserve(img);
             }
         });
+    }, {
+        root: null,
+        rootMargin: '100px 0px', // Load images 100px before they enter viewport
+        threshold: 0.1
     });
     
     images.forEach(img => {
+        // Set initial state
+        img.style.opacity = '0';
         imageObserver.observe(img);
+    });
+}
+
+// Enhanced image click handling with proper event separation
+function setupImageClickHandling() {
+    document.addEventListener('click', (e) => {
+        const imageContainer = e.target.closest('.outfit-image-container');
+        const actionButton = e.target.closest('.action-button');
+        
+        // Only handle image click if not clicking on action buttons
+        if (imageContainer && !actionButton) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Add touch feedback
+            imageContainer.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                imageContainer.style.transform = '';
+            }, 150);
+            
+            // Extract outfit ID from onclick attribute or data attribute
+            const onclickAttr = imageContainer.getAttribute('onclick');
+            if (onclickAttr) {
+                const outfitIdMatch = onclickAttr.match(/navigateToOutfitDetail\((\d+)\)/);
+                if (outfitIdMatch) {
+                    const outfitId = parseInt(outfitIdMatch[1]);
+                    navigateToOutfitDetail(outfitId);
+                }
+            }
+        }
     });
 }
 

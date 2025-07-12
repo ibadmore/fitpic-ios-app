@@ -1,83 +1,215 @@
-1. First think through the problem, read the codebase for relevant files, and write a plan to [tasks/todo.md].
-2. The plan should have a list of todo items that you can check off as you complete them
-3. Before you begin working, check in with me and I will verify the plan.
-4. Then, begin working on the todo items, marking them as complete and once batches of tasks are all completed, moving groups of completed tasks into the "completed work" section and putting outstanding task into the "active tasks section" and leave "active tasks" section blank if there are no more approved tasks remaining.
-5. Please every step of the way just give me a high level explanation of what changes you made
-6. Make every task and code change you do as simple as possible. We want to avoid making any massive or complex changes. Every change should impact as little code as possible. Everything is about simplicity.
-7. Finally after completing a logical group of work or major milestone:
-   a. Add a review section to the [tasks/todo.md] file with a summary of the changes you made and any other relevant information (max of 100 characters)
-   b. **AUTOMATICALLY commit and push to GitHub using these commands:**
-      - `git add .` (stage all changes)
-      - `git commit -m "Brief descriptive message of what was completed"`
-      - `git push origin main` (push to main branch)
-   c. Use commit messages that clearly describe the work completed (e.g. "Fix navigation bugs", "Add user authentication", "Update styling for mobile")
+# HTML-iOS Mockup Development Instructions
 
-## Grouped Commit Strategy:
-- **Batch related changes**: Group multiple related todo items or fixes into a single commit
-- **Commit triggers**: Only commit after completing:
-  - A complete feature or bug fix (multiple related tasks)
-  - A logical milestone (e.g., "Complete user authentication flow")
-  - 3-5 related todo items that work together
-  - End of a work session when multiple changes are ready
-- **Avoid micro-commits**: Don't commit after every single small change
-- **Commit message format**: Summarize all changes in the commit (e.g. "Implement user auth, fix navigation bugs, update mobile styling")
-- **Check status first**: Run `git status` to see what files have changed before committing
+## 🎯 Project Context
+Building mobile consumer applications (outfit organizers, gamified idea management) as HTML mockups for eventual Swift/iOS conversion. Focus on automation, visual consistency, and iOS-ready patterns.
 
-## Commit Timing Guidelines:
-- **Wait and batch**: Complete multiple related tasks before committing
-- **Natural breakpoints**: Commit at logical stopping points (end of feature, major bug fix complete)
-- **Session-based**: At minimum, commit once per work session when substantial progress is made
-- **Quality over quantity**: Better to have fewer meaningful commits than many small ones
-- **Emergency commits**: Only commit immediately for critical fixes that need to be saved urgently
+## 🛠️ Development Workflow
 
-## Todo.md Template:
-Use this condensed format for maintaining the todo.md file:
+### 1. Planning Phase
+- **Think through the problem** and explore codebase for relevant files
+- **Create/update plan** in `tasks/todo.md` with specific, measurable tasks
+- **Check in for approval** before implementation begins
+
+### 2. Implementation Phase
+- Work on approved tasks, marking complete as you go
+- **Provide high-level updates** after each change (1-2 sentences max)
+- **Simplicity is key**: Every change should impact minimal code
+- Move completed tasks to "completed work" section in batches
+
+### 3. Git Workflow - Grouped Commits
+After completing **logical groups of work**:
+```bash
+git status          # Review changes first
+git add .           # Stage all changes
+git commit -m "Descriptive message summarizing batch"
+git push origin main
+```
+
+**Commit Triggers:**
+- Complete feature implementation (3-5 related tasks)
+- Major bug fix resolution
+- End of work session with substantial progress
+- Logical milestone completion
+
+**Avoid:** Single-task commits, micro-commits, uncommitted work accumulation
+
+## 📱 Mobile-Specific Guidelines
+
+### Visual Implementation
+- **Reference images**: Use provided photos to extract design tokens
+- **Touch-first**: Minimum 44x44pt touch targets
+- **Responsive**: Design for 320px minimum width
+- **Animations**: Use Framer Motion for gesture-based interactions
+
+### Tech Stack Patterns
+```javascript
+// Component structure aligned with SwiftUI
+const Card = ({ children, onSwipe }) => {
+  // Mirrors SwiftUI's declarative approach
+  return (
+    <motion.div 
+      className="rounded-lg shadow-md p-4"
+      whileTap={{ scale: 0.98 }}
+      drag="x"
+      onDragEnd={onSwipe}
+    >
+      {children}
+    </motion.div>
+  );
+};
+```
+
+### File Organization
+```
+src/
+├── components/
+│   ├── ui/          # Maps to SwiftUI controls
+│   ├── layout/      # Maps to SwiftUI stacks
+│   └── animations/  # Framer Motion components
+├── features/        # Feature-based modules
+│   ├── wardrobe/
+│   ├── outfits/
+│   └── recommendations/
+└── styles/          # Tailwind + design tokens
+```
+
+## 📋 Todo.md Structure
 
 ```markdown
-# [Project Name] - Development Tracker
+# [App Name] - iOS Mockup Development
 
 ## 🟢 ACTIVE TASKS
-- [ ] Phase 1 (brief description)
-    - [ ] Task 1
-    - [ ] Task 2
+- [ ] Feature: Card Component System
+    - [ ] Create base card with touch gestures
+    - [ ] Add swipe-to-delete animation
+    - [ ] Implement haptic feedback hooks
 
 ## 🔴 UPCOMING TASKS
-- [ ] Phase 2 (brief description)
-    - [ ] Task 1
-    - [ ] Task 2
-- [ ] Phase 3 (brief description)
-    - [ ] Task 1
-    - [ ] Task 2
+- [ ] Feature: Camera Integration UI
+    - [ ] Design camera capture interface
+    - [ ] Create photo preview component
+- [ ] SwiftUI Prep: Navigation Patterns
+    - [ ] Document navigation flow
+    - [ ] Create transition animations
 
 ## 📋 CURRENT PLAN
-**Goal**: Main objective for current work
-**Priority**: Task order (Task1 → Task2 → Task3)
-**Timeline**: Expected sessions to complete
+**Goal**: Build touch-optimized wardrobe management interface
+**Priority**: Cards → Grid Layout → Camera UI → Navigation
+**iOS Patterns**: Using VStack/HStack equivalents, @State-like hooks
 
 ---
 
 ## ✅ COMPLETED WORK
 
-### Session N: [Session Title] (Date)
-**Tasks**: One-line summary of session focus
-- Specific accomplishment with relevant details
-- **Bug/Feature Name**: What was fixed/added and key details
-- Another task with outcome (e.g., fixed X → Y)
-- Results: Final outcome or status
+### Session N: Mobile Card System (Date)
+**Focus**: Touch-optimized card components
+- Created SwipeableCard with Framer Motion
+- **Touch Targets**: Increased to 48x48 minimum
+- Added spring animations matching iOS behavior
+- **Result**: Smooth 60fps interactions
 
-### Session N-1: [Previous Session Title]
-**Problem**: Brief problem statement if applicable
-**Solution**: How it was resolved
-- Implementation detail 1
-- Implementation detail 2
-- Result: Outcome achieved
+### Session N-1: Project Setup
+**Setup**: TypeScript + Tailwind + Framer Motion
+- Configured mobile-first breakpoints
+- Set up iOS-inspired color system
+- **SwiftUI Prep**: Component naming conventions
+```
+
+**Keep sessions under 150 chars when archived**
+
+## 🚀 Automation Commands
+
+### Available Slash Commands
+- `/test-mobile` - Run mobile UI tests with screenshots
+- `/animate [component]` - Add Framer Motion to component
+- `/ios-preview` - Generate iOS simulator preview
+- `/extract-tokens [image]` - Extract design tokens from reference
+
+### MCP Integration
+- **Figma Dev Mode**: Auto-sync design changes
+- **Mobile MCP**: Test on iOS simulator
+- **Puppeteer**: Visual regression testing
+
+## 💡 Best Practices
+
+### Prompting for Mobile UI
+```xml
+<context>
+Building [specific feature] for [app type]
+iOS target with SwiftUI conversion planned
+</context>
+
+<requirements>
+- Touch-optimized with 44pt minimum targets
+- Smooth 60fps animations
+- Offline-first architecture
+- Reference: [image path or description]
+</requirements>
+
+<technical>
+Use TypeScript + Tailwind + Framer Motion
+Follow atomic design principles
+Prepare for SwiftUI conversion
+</technical>
+```
+
+### Progressive Enhancement
+1. **Structure first**: Semantic HTML with ARIA
+2. **Enhance interactions**: Add touch gestures
+3. **Polish animations**: Spring physics matching iOS
+4. **Optimize performance**: Lazy loading, virtualization
+
+### SwiftUI Conversion Notes
+- React functional components → SwiftUI Views
+- useState → @State
+- useEffect → onAppear/onChange
+- Flexbox → HStack/VStack
+- CSS Grid → LazyVGrid
+- Tailwind utilities → SwiftUI modifiers
+
+## 🎨 Design System
+
+### Touch Guidelines
+- Minimum touch target: 44x44pt
+- Spacing between targets: 8pt minimum
+- Edge padding: 16pt for thumbs
+- Gesture zones: Top 20% for navigation
+
+### Animation Standards
+```javascript
+// iOS-inspired spring animations
+const springConfig = {
+  type: "spring",
+  stiffness: 300,
+  damping: 30
+};
+
+// Haptic feedback triggers
+const hapticTriggers = ['onTap', 'onSwipeComplete', 'onError'];
+```
+
+### Color Tokens
+Extract from reference images and define as:
+```css
+:root {
+  --color-primary: /* from reference */;
+  --color-surface: /* from reference */;
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.1);
+}
+```
+
+## 📊 Performance Targets
+- First paint: < 1.5s
+- Interaction ready: < 3s
+- Animation FPS: 60fps consistent
+- Touch response: < 100ms
+
+## 🔍 Testing Strategy
+1. Visual regression with Puppeteer MCP
+2. Touch interaction testing on iOS Simulator
+3. Accessibility audit with mobile screen readers
+4. Performance profiling in Safari DevTools
 
 ---
 
-**Format Guidelines**:
-- Keep active tasks to 5-7 items maximum
-- Include **bold labels** for problems, solutions, errors, features
-- Preserve technical details (e.g., function names, error messages)
-- Use arrows → to show transformations or fixes
-- Archive older sessions in collapsible section and keep archive to max 150 characters
-- Maintain task context while being concise
+**Remember**: Every decision should consider the eventual Swift/iOS conversion. Build with native patterns in mind from the start.
