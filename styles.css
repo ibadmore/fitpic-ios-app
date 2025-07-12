@@ -525,19 +525,51 @@ body {
     height: 100vh;
     opacity: 0;
     transform: translateX(100%);
-    transition: all var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
     background-color: var(--bg-primary);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
 .page.active {
     opacity: 1;
     transform: translateX(0);
+    z-index: 2;
 }
 
 .page.exiting {
+    opacity: 0;
     transform: translateX(-100%);
+    z-index: 1;
+    transition: all 250ms cubic-bezier(0.55, 0.06, 0.68, 0.19);
+}
+
+/* Prevent FOUC during page transitions */
+.page-transitioning {
+    overflow: hidden;
+}
+
+.page-transitioning * {
+    pointer-events: none;
+}
+
+/* Enhanced page transition system */
+.page-loading {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.page-entering {
+    opacity: 0;
+    transform: translateX(100%);
+    animation: pageSlideIn 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.page-leaving {
+    animation: pageSlideOut 250ms cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
 }
 
 /* Container System */
@@ -549,6 +581,13 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
+}
+
+/* Entry Page Centering */
+#entry-page .container {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .container-wide {
@@ -801,7 +840,9 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-8);
 }
 
 .input-group {
@@ -1025,10 +1066,12 @@ body {
 }
 
 .auth-section {
-    max-width: 400px;
+    max-width: 320px;
     margin: 0 auto;
     width: 100%;
-    padding: 0 var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
 }
 
 .phone-auth {
@@ -1106,10 +1149,26 @@ body {
     padding-bottom: var(--space-12);
     opacity: 1;
     transform: translateX(0);
-    transition: opacity var(--transition-slow), transform var(--transition-slow);
+    transition: opacity 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                transform 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
 }
 
-.onboarding-step.active { display: flex; }
+.onboarding-step.active { 
+    display: flex; 
+}
+
+.onboarding-step.step-entering {
+    opacity: 0;
+    transform: translateX(20px);
+    animation: stepSlideIn 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.onboarding-step.step-exiting {
+    opacity: 1;
+    transform: translateX(0);
+    animation: stepSlideOut 250ms cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
+}
 
 .step-content {
     flex: 1;
@@ -2456,10 +2515,97 @@ body {
     }
 }
 
+@keyframes pageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pageSlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes stepSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes stepSlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}
+
 /* Animation Utilities */
 .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
 .animate-spin { animation: spin 1s linear infinite; }
 .animate-pulse { animation: systematicPulse 2s infinite; }
+
+/* Performance and Anti-Flickering Optimizations */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+.nav-item, .action-button, .outfit-tag {
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+.nav-item {
+    transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.action-button {
+    transition: transform 150ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.action-button.animating {
+    pointer-events: none;
+}
+
+/* Additional 60fps optimizations */
+.outfit-card, .nav-panel, .modal {
+    contain: layout style paint;
+}
+
+/* Prevent text flickering during transitions */
+h1, h2, h3, h4, h5, h6, p, span, button {
+    text-rendering: optimizeSpeed;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+/* Smooth scrolling optimizations */
+.page {
+    contain: layout;
+    isolation: isolate;
+}
 
 /* ============================================
    RESPONSIVE DESIGN

@@ -1,156 +1,142 @@
-# FitPic iOS App - Development Tracker
+# FitPic iOS App - UI/UX Improvement Implementation Plan
 
 ## 🟢 ACTIVE TASKS
 
-## 🔴 UPCOMING TASKS
+### Phase 1: Landing Page & Logo Positioning
+- [ ] Center logo and input buttons on entry page
+  - [ ] Update CSS grid/flexbox layout for perfect centering
+  - [ ] Ensure responsive behavior across screen sizes
+  - [ ] Verify 44pt minimum touch targets
 
+### Phase 2: Page Transition & Flickering Issues  
+- [ ] Fix text/icon flickering during page transitions
+  - [ ] Analyze transition timing in navigation system
+  - [ ] Add proper CSS transition delays
+  - [ ] Implement loading states to prevent FOUC
+  - [ ] Test transition smoothness between all pages
+
+### Phase 3: Onboarding Flow Improvements
+- [ ] Format age input button properly
+  - [ ] Style age selector to match design system
+  - [ ] Add proper validation and error states
+- [ ] Fix pagination when jumping between onboarding pages
+  - [ ] Debug navigation state management
+  - [ ] Ensure proper step tracking and progress
+- [ ] Fix onboarding page 3 layout and continue button
+  - [ ] Pin continue button to bottom of viewport
+  - [ ] Make content area scrollable above fixed button
+  - [ ] Test content overflow handling
+
+### Phase 4: Style Profile Card Improvements
+- [ ] Fix content appearing/disappearing on style profile page
+  - [ ] Debug CSS transition timing
+  - [ ] Add proper loading states
+- [ ] Format Share button properly
+  - [ ] Apply button styling from design system
+  - [ ] Ensure proper touch target size
+- [ ] Remove "Your Style Profile" and description text
+  - [ ] Clean up page headers and copy
+
+### Phase 5: Home Page Outfit Images & Lazy Loading
+- [ ] Add lazy loader cards for outfit images
+  - [ ] Implement skeleton loading states
+  - [ ] Enhance intersection observer performance
+  - [ ] Add smooth fade-in animations
+
+### Phase 6: Outfit Detail Page Click Handling
+- [ ] Implement outfit image click to detail page
+  - [ ] Separate click zones for different actions
+  - [ ] Maintain like button functionality
+  - [ ] Enhance shop button to expand detail view
+
+### Phase 7: Favorites Page Enhancement
+- [ ] Create outfit category buckets
+  - [ ] Design category organization system
+  - [ ] Implement responsive grid layout
+- [ ] Add carousels for each outfit category
+  - [ ] Build horizontal scrolling components
+  - [ ] Add touch/swipe navigation
+
+### Phase 8: Checkout & Cart Functionality
+- [ ] Add checkout page for cart items
+  - [ ] Create cart summary layout
+  - [ ] Add item management (quantity, remove)
+  - [ ] Implement checkout flow UI
+
+### Phase 9: Navigation & Settings Updates
+- [ ] Change settings icon to gear icon
+  - [ ] Replace sun icon with proper gear SVG
+  - [ ] Update navigation state handling
+- [ ] Add styling to settings page
+  - [ ] Apply consistent design system
+  - [ ] Improve visual hierarchy
+- [ ] Add edit profile functionality to settings
+  - [ ] Create inline editing components
+  - [ ] Add save/cancel functionality
+  - [ ] Implement form validation
+- [ ] Change home icon to actual house icon
+  - [ ] Replace tiles icon with home SVG
+  - [ ] Update icon sizing and alignment
+
+### Phase 10: Filter & Tag Improvements
+- [ ] Remove "styles" from filter button text
+  - [ ] Update button copy and layout
+- [ ] Implement auto-scrolling tags with looping
+  - [ ] Add automatic horizontal scroll animation
+  - [ ] Create infinite loop effect
+  - [ ] Ensure smooth performance
+
+### Phase 11: Logo & Branding Updates
+- [ ] Update logo to hanger + "Fitpic" with transparent background
+  - [ ] Create new logo asset
+  - [ ] Update all logo references
+  - [ ] Ensure proper scaling
+
+### Phase 12: Onboarding Content & Copy Updates
+- [ ] Update brand selection copy to "Select brands that match your style"
+- [ ] Add more brands to onboarding page 2
+  - [ ] Research and add popular fashion brands
+  - [ ] Ensure proper grid layout
+- [ ] Create new copy for "What occasions do you dress for?"
+  - [ ] Write engaging, clear copy
+  - [ ] Test copy length and formatting
+- [ ] Add more options to "select your style aesthetic" section
+  - [ ] Research and add aesthetic categories
+  - [ ] Update visual presentation
+- [ ] Remove black background from camera upload sections
+  - [ ] Make backgrounds transparent
+  - [ ] Ensure proper contrast and readability
+- [ ] Change final CTA to "Continue" instead of "Continue to AI styling"
+
+### Phase 13: UI/UX Polish & Visual Hierarchy
+- [ ] Reduce tag-heavy feeling and improve clickable element distinction
+  - [ ] Audit all clickable vs non-clickable elements
+  - [ ] Enhance visual hierarchy with better contrast
+  - [ ] Reduce visual noise from excessive tags
+- [ ] Implement temperature overlay on weather images
+  - [ ] Create floating text overlay
+  - [ ] Style with large temperature and small description
+  - [ ] Ensure proper contrast and readability
+- [ ] Standardize color palette and reduce visual confusion
+  - [ ] Audit all button and element colors
+  - [ ] Create consistent color usage guidelines
+  - [ ] Reduce bright color overuse
+
+## 🔴 UPCOMING TASKS
+- [ ] Performance optimization and testing
+- [ ] Accessibility audit and improvements
+- [ ] Mobile testing on actual devices
+- [ ] SwiftUI conversion preparation
 
 ## 📋 CURRENT PLAN
-**Goal**: Complete multi-phase refactoring for better maintainability
-**Priority**: CSS → State → Events → Cleanup → Performance
-**Timeline**: 3-4 sessions completed
+**Goal**: Implement comprehensive UI/UX improvements across all app areas
+**Priority**: Page transitions → Onboarding flow → Home page → Navigation → Polish
+**iOS Patterns**: Maintaining iOS-ready components and animations throughout
+
+**Estimated Timeline**: 3-4 development sessions
+**Focus Areas**: Visual consistency, touch optimization, performance, user experience
 
 ---
 
 ## ✅ COMPLETED WORK
-
-### Session 10: Fix Processing Page Error (2025-07-09)
-**Tasks**: Fixed null reference error preventing navigation to processing page
-- **Error**: updateProcessingText() tried to set textContent on non-existent 'processing-text' element
-- **Solution**: Added missing <h2 id="processing-text"> element to index.html
-- Results: Processing page now loads correctly after onboarding
-
-### Session 9: Fix currentStep Console Errors (2025-07-09)
-**Tasks**: Fixed undefined currentStep variable errors in onboarding functions
-- **Fixed nextStep() function**: Changed direct currentStep usage to getState('navigation.currentStep')
-- **Fixed updateProgress() function**: Added proper state getter for currentStep variable
-- **State Management**: Replaced currentStep++ with setState('navigation.currentStep', nextStepValue)
-- Results: Resolved all currentStep undefined errors, onboarding flow works correctly
-
-### Session 8: Console Error Fixes (2025-07-09)
-**Tasks**: Fixed all runtime errors preventing app functionality
-- **Fixed currentPage Error**: Updated showPage() to use getState('navigation.currentPage')
-- **Fixed Cart Badge Null**: Added null check in updateCartBadge() function
-- **Fixed Theme Migration**: Added special handling for non-JSON theme string values
-- **Fixed Missing Constants**: Added defensive checks for COUNTRIES/OUTFIT_DATA with fallbacks
-- **Fixed Broken Images**: Replaced placeholder.com URLs with inline SVG data URLs
-- Results: App now loads without console errors, all functionality restored
-
-### Session 7: Complete Refactoring - All Phases (2025-07-09)
-**Tasks**: Completed phases 3-7 with comprehensive improvements and performance optimization
-- **Phase 3-5 Complete**: CSS organization, state management, event handlers (from previous session)
-- **Phase 6 Complete**: Code cleanup, legacy variable removal, HTML data attributes, comprehensive error handling
-- **Phase 7 Complete**: Performance optimization with caching, lazy loading, debouncing, throttling
-- **Legacy Migration**: Successfully removed all 15+ legacy variables, migrated to unified state system
-- **Performance Enhancements**: Added state caching (5s duration), performance monitoring, lazy loading for components
-- **Error Handling**: Comprehensive try/catch blocks, input validation, graceful degradation
-- **HTML Modernization**: Converted inline handlers to data attributes for CSP compliance
-- **Development Tools**: Added PerformanceMonitor class, debounce/throttle utilities, lazy loading helpers
-- Results: Production-ready codebase with enterprise-level architecture, performance, and maintainability
-
-### Session 6: Multi-Phase Refactoring Complete (2025-07-09)
-**Tasks**: Completed phases 3, 4, and 5 with comprehensive improvements
-- **Phase 3 Complete**: Removed duplicate navigation overlay, consolidated cart styles across 6 sections into single unified section
-- **Phase 4 Complete**: Created unified appState object, implemented getter/setter functions, added localStorage migration system
-- **Phase 5 Complete**: Built centralized EventManager class with delegation for dynamic content, keyboard handlers, mobile touch events
-- **State Management**: Unified 15+ global variables into appState with nested structure (navigation, commerce, collections, interactions)
-- **Event System**: Replaced 58+ inline onclick handlers with centralized system supporting data attributes
-- **Storage Optimization**: Single 'fitpic-app-state' key replaces 34+ individual localStorage keys with automatic migration
-- Results: Dramatically improved code organization, maintainability, and performance
-
-### Session 5: Code Refactoring - Phase 1 & 2
-**Tasks**: Extract constants and configuration to separate files
-- Created constants.js with all app constants (timings, limits, messages)
-- Moved country data to data/countries.js (48 countries)
-- Extracted outfit data to data/outfits.js (6 outfits)
-- Updated script.js to use constants instead of hardcoded values
-- Replaced localStorage keys and animation timings with constants
-- Result: Cleaner code with centralized configuration
-- **Phase 2 Complete**: Added 10+ section headers, removed duplicate showToast function
-
-### Session 4: Workflow Updates
-**Tasks**: Redesigned todo.md format, added grouped commit strategy
-- Updated CLAUDE.md with grouped commit strategy to prevent flooding
-- Redesigned todo.md format (188 → 34 lines, 82% reduction)
-- Added session-based tracking system
-- Created todo.md template in CLAUDE.md
-
-### Session 3: GitHub Automation
-**Tasks**: Automated version control workflow
-- Added automatic commit workflow to CLAUDE.md
-- Implemented grouped commits to prevent flooding
-- Added git commands: `git add .`, `git commit -m "message"`, `git push`
-
-### Session 2: Critical Bug Fixes
-**Tasks**: Fixed JavaScript errors blocking app functionality
-- **Cart Badge Error**: Fixed null reference 'cart-badge' → 'nav-cart-badge'
-- **Processing Text Error**: Fixed 'processing-text' → 'processing-insight' 
-- **Navigation Visibility**: Hidden on entry page, visible on authenticated pages
-- **Processing Navigation**: Fixed stuck animation, now flows to home feed
-
-### Session 1: Processing Page Navigation Fix  
-**Problem**: App stuck at processing animation after onboarding
-**Solution**: Fixed timing and navigation logic
-- Processing shows 4 steps @ 3s intervals
-- Added 1.5s delay before home navigation
-- Fixed setInterval and clearInterval logic
-- Result: Smooth onboarding → processing → home flow
-
----
-
-## 🎯 IMPLEMENTATION HIGHLIGHTS
-
-### State Management System
-- **Unified appState**: Single source of truth for all application state
-- **Nested Structure**: navigation, userProfile, commerce, scroll, processing, ui, interactions, collections
-- **Getter/Setter Functions**: `getState('userProfile.preferences.theme')` and `setState('commerce.cart', [])`
-- **Automatic Persistence**: All state changes automatically saved to localStorage
-- **Migration System**: Seamless migration from old localStorage keys to unified state
-
-### Event Management System
-- **EventManager Class**: Centralized event handling with initialization control
-- **Event Delegation**: Single listeners handle dynamic content (outfit cards, cart items, modals)
-- **Data Attributes**: Clean HTML using `data-nav-action`, `data-action`, `data-modal-close` patterns
-- **Mobile Support**: Touch feedback handlers and gesture recognition
-- **Keyboard Navigation**: Escape key modal closing, tab navigation improvements
-- **Generic Actions**: Flexible action system using data attributes and function mapping
-
-### CSS Organization
-- **Eliminated Duplicates**: Removed duplicate navigation overlay, consolidated cart styles
-- **Logical Sections**: 12 organized sections with clear headers
-- **Component Consolidation**: All related styles grouped together
-- **Maintained Functionality**: All existing styles preserved during reorganization
-
----
-
-## 📊 METRICS
-
-### Before Refactoring:
-- **Global Variables**: 15+ scattered variables
-- **localStorage Keys**: 34+ individual keys
-- **Event Handlers**: 58+ inline onclick handlers
-- **CSS Duplicates**: 3+ duplicate sections
-- **Code Organization**: Mixed concerns, scattered functionality
-- **Performance**: No caching, no lazy loading, no monitoring
-- **Error Handling**: Basic try/catch, no input validation
-
-### After Refactoring:
-- **State Management**: Single appState object with nested structure + caching
-- **Storage**: Single 'fitpic-app-state' key with automatic migration
-- **Event System**: Centralized EventManager with delegation
-- **CSS**: Organized into 12 logical sections, duplicates removed
-- **Performance**: State caching, lazy loading, throttling, monitoring
-- **Error Handling**: Comprehensive validation, graceful degradation
-- **HTML**: Modern data attributes, CSP-compliant
-- **Development**: Performance monitoring, debugging tools
-
----
-
-## 🔧 TECHNICAL DEBT RESOLVED
-
-1. **State Management**: Eliminated global variable pollution
-2. **Event Handling**: Removed inline handlers improving security (CSP compliance)
-3. **Code Organization**: Clear separation of concerns
-4. **Data Persistence**: Unified localStorage strategy
-5. **Performance**: Reduced memory footprint through event delegation
-6. **Maintainability**: Centralized configuration and consistent patterns
+*Tasks will be moved here as they are completed*

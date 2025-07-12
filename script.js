@@ -833,30 +833,38 @@ function navigateToTab(tabName) {
 
 // Update active navigation item based on current page
 function updateActiveNavItem(pageId) {
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    // Map page IDs to navigation data-page attributes
-    const pageMap = {
-        'home-page': 'home',
-        'favs-page': 'wishlist',
-        'settings-page': 'settings',
-        'profile-page': 'profile',
-        'cart-page': 'shopping-bag'
-    };
-    
-    const navPage = pageMap[pageId];
-    if (navPage) {
-        const activeItem = document.querySelector(`.nav-item[data-page="${navPage}"]`);
-        if (activeItem) {
-            activeItem.classList.add('active');
+    // Use requestAnimationFrame to ensure smooth transitions
+    requestAnimationFrame(() => {
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Map page IDs to navigation data-page attributes
+        const pageMap = {
+            'home-page': 'home',
+            'favs-page': 'wishlist',
+            'settings-page': 'settings',
+            'profile-page': 'profile',
+            'cart-page': 'shopping-bag'
+        };
+        
+        const navPage = pageMap[pageId];
+        if (navPage) {
+            const activeItem = document.querySelector(`.nav-item[data-page="${navPage}"]`);
+            if (activeItem) {
+                // Force layout recalculation to prevent flickering
+                activeItem.offsetHeight;
+                activeItem.classList.add('active');
+            }
         }
-    }
+    });
 }
 
 function showPage(pageId) {
+    // Add loading state to prevent FOUC
+    document.body.classList.add('page-transitioning');
+    
     // Add exit animation to current page
     const currentPageEl = document.getElementById(getState('navigation.currentPage'));
     if (currentPageEl) {
@@ -866,24 +874,36 @@ function showPage(pageId) {
     // Always collapse navigation when changing pages
     collapseNavigation();
     
-    setTimeout(() => {
-        // Hide all pages
-        document.querySelectorAll('.page').forEach(page => {
-            page.classList.remove('active', 'exiting');
-        });
-        
-        // Show target page
-        const targetPage = document.getElementById(pageId);
-        if (targetPage) {
-            targetPage.classList.add('active');
-            setState('navigation.currentPage', pageId);
+    // Use requestAnimationFrame for smoother transitions
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active', 'exiting');
+            });
             
-            // Update active navigation item
-            updateActiveNavItem(pageId);
-        } else {
-            console.error('Page not found:', pageId);
-        }
-    }, 150);
+            // Show target page
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                // Force layout recalculation to prevent flickering
+                targetPage.offsetHeight;
+                
+                targetPage.classList.add('active');
+                setState('navigation.currentPage', pageId);
+                
+                // Update active navigation item
+                updateActiveNavItem(pageId);
+                
+                // Remove loading state after transition completes
+                setTimeout(() => {
+                    document.body.classList.remove('page-transitioning');
+                }, 250);
+            } else {
+                console.error('Page not found:', pageId);
+                document.body.classList.remove('page-transitioning');
+            }
+        }, 250);
+    });
 }
 
 // ============================================
@@ -893,34 +913,39 @@ function showPage(pageId) {
 function nextStep() {
     const currentStep = getState('navigation.currentStep');
     if (currentStep < 7) {
-        // Hide current step with fade out
+        // Add transition class to prevent flickering
         const currentStepEl = document.getElementById(`step-${currentStep}`);
-        currentStepEl.style.opacity = '0';
-        currentStepEl.style.transform = 'translateX(-20px)';
+        currentStepEl.classList.add('step-exiting');
         
-        setTimeout(() => {
-            currentStepEl.classList.remove('active');
-            
-            // Show next step with fade in
-            const nextStepValue = currentStep + 1;
-            setState('navigation.currentStep', nextStepValue);
-            const nextStepEl = document.getElementById(`step-${nextStepValue}`);
-            nextStepEl.classList.add('active');
-            nextStepEl.style.opacity = '0';
-            nextStepEl.style.transform = 'translateX(20px)';
-            
+        // Use requestAnimationFrame for smoother transitions
+        requestAnimationFrame(() => {
             setTimeout(() => {
-                nextStepEl.style.opacity = '1';
-                nextStepEl.style.transform = 'translateX(0)';
-            }, 50);
-            
-            updateProgress();
-            
-            // Update profile preview when reaching final step
-            if (getState('navigation.currentStep') === 7) {
-                setTimeout(updateProfilePreview, 300);
-            }
-        }, 300);
+                currentStepEl.classList.remove('active', 'step-exiting');
+                
+                // Show next step with fade in
+                const nextStepValue = currentStep + 1;
+                setState('navigation.currentStep', nextStepValue);
+                const nextStepEl = document.getElementById(`step-${nextStepValue}`);
+                if (nextStepEl) {
+                    nextStepEl.classList.add('active', 'step-entering');
+                    
+                    // Force layout recalculation
+                    nextStepEl.offsetHeight;
+                    
+                    // Remove entering class after transition
+                    setTimeout(() => {
+                        nextStepEl.classList.remove('step-entering');
+                    }, 250);
+                }
+                
+                updateProgress();
+                
+                // Update profile preview when reaching final step
+                if (getState('navigation.currentStep') === 7) {
+                    setTimeout(updateProfilePreview, 300);
+                }
+            }, 250);
+        });
     }
 }
 
@@ -1144,13 +1169,24 @@ function toggleFilterMenu() {
 
 // Like button functionality
 function toggleLike(button) {
+    // Prevent multiple rapid clicks
+    if (button.classList.contains('animating')) return;
+    
+    button.classList.add('animating');
     button.classList.toggle('liked');
     
-    // Add animation
+    // Use CSS transitions instead of direct style manipulation for smoother animation
     button.style.transform = 'scale(1.2)';
-    setTimeout(() => {
-        button.style.transform = 'scale(1)';
-    }, 200);
+    
+    // Use requestAnimationFrame for smoother animation
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            button.style.transform = 'scale(1)';
+            setTimeout(() => {
+                button.classList.remove('animating');
+            }, 100);
+        }, 150);
+    });
     
     // Haptic feedback
     if (navigator.vibrate) {
